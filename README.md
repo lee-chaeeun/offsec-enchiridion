@@ -12,13 +12,15 @@ offsec-enchiridion/
 ├──README.md
 ├── 00-index.md
 ├── 01-methodology/
+│   ├──OSCP_Exam_Report_Template.md       
 ├── 02-enumeration/        
 ├── 03-exploitation/      
 ├── 04-shells-access/     
 ├── 05-post-exploitation/  
 ├── 06-privesc/
 ├── 07-active-directory/   
-├── 08-tools/            
+├── 08-tools/ 
+│   ├── ligolo-ng.md       
 ├── 09-checklists/
 └── 10-cheatsheets/
 ```
