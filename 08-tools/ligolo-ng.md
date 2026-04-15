@@ -17,7 +17,7 @@ Multi-hops are made easier with ligolo compared to imo proxy chains or ssh port 
 | First Hop       | 192.168.111.137 |
 | Second Hop      | 10.10.111.13    |
 
-Through the First Hop -> I can access the Second Hop -> Through the second hop, I can access other addresses in the subnet 
+Through the First Hop Ი︵𐑼 -> I can access the Second Hop Ი︵𐑼 Ი︵𐑼 -> Through the second hop, I can access other addresses in the subnet 
 
 ### Setup Ligolo
 
@@ -161,3 +161,8 @@ PING 10.20.111.14 (10.20.111.14) 56(84) bytes of data.
 
 And you can just keep hopping away... 
 
+  /)/)
+( . .)
+( づ♡    
+
+<sub>source of <a href="https://emojicombos.com/bunny"> bunny ascii art  </a></sub>
