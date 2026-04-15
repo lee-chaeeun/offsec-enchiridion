@@ -1,10 +1,10 @@
 
-[Ligolo-ng Github Repo][https://github.com/nicocha30/ligolo-ng] 
+[Ligolo-ng Github Repo](https://github.com/nicocha30/ligolo-ng) 
 
 Ligolo-ng uses a gVisor-based userland network stack plus a TUN interface to translate local packets into remote connections via an agent, making remote networks behave like directly routed ones and allowing tools like nmap to work without proxychains. Pivoting through segmented networks and subnets, successful lateral movement is made easy with ligolo. 
 Multi-hops are made easier with ligolo compared to imo proxy chains or ssh port forwarding ;) 
 
-[Ligolo agents releases can be downloaded  here (e.g. executables)][https://github.com/nicocha30/ligolo-ng/releases] 
+[Ligolo agents releases can be downloaded  here (e.g. executables)](https://github.com/nicocha30/ligolo-ng/releases) 
 - windows / linux versions are both downloadable 
 
 ### Network Arch in Demo
