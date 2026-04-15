@@ -61,7 +61,7 @@ ligolo-ng »
 ligolo-ng » INFO[0934] Agent joined.      
 ligolo-ng » session
 ? Specify a session : 1 - NT AUTHORITY\SYSTEM@target-machine-137 - 192.168.111.137:12345 - xxxxxxxxxxx
-[Agent : NT AUTHORITY\SYSTEM@arget-machine-137] » ifconfig
+[Agent : NT AUTHORITY\SYSTEM@target-machine-137] » ifconfig
 ┌───────────────────────────────────────────────┐
 │ Interface 0                                   │
 ├──────────────┬────────────────────────────────┤
