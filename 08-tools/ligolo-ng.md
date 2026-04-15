@@ -3,7 +3,7 @@
 
 [Ligolo-ng Github Repo](https://github.com/nicocha30/ligolo-ng) 
 
-1Ligolo-ng uses a gVisor-based userland network stack plus a TUN interface to translate local packets into remote connections via an agent, making remote networks behave like directly routed ones and allowing tools like nmap to work without proxychains. Pivoting through segmented networks and subnets, successful lateral movement is made easy with ligolo. 
+Ligolo-ng uses a gVisor-based userland network stack plus a TUN interface to translate local packets into remote connections via an agent, making remote networks behave like directly routed ones and allowing tools like nmap to work without proxychains. Pivoting through segmented networks and subnets, successful lateral movement is made easy with ligolo. 
 Multi-hops are made easier with ligolo compared to imo proxy chains or ssh port forwarding ;) 
 
 [Ligolo agents releases can be downloaded  here (e.g. executables)](https://github.com/nicocha30/ligolo-ng/releases) 
@@ -151,9 +151,12 @@ INFO[1702] Starting tunnel to username@hostname (xxxxxxxxxxx)
 
 ```
 └─$ sudo ip route add 10.20.111.0/24 dev ligolo1
+```
+
+test the hop on a different address in the subnet 
+```
 └─$ ping 10.20.111.14
 PING 10.20.111.14 (10.20.111.14) 56(84) bytes of data.
-...
 ```
 
 And you can just keep hopping away... 
