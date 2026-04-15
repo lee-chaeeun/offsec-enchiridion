@@ -1,7 +1,9 @@
 
+# Ligolo-ng
+
 [Ligolo-ng Github Repo](https://github.com/nicocha30/ligolo-ng) 
 
-Ligolo-ng uses a gVisor-based userland network stack plus a TUN interface to translate local packets into remote connections via an agent, making remote networks behave like directly routed ones and allowing tools like nmap to work without proxychains. Pivoting through segmented networks and subnets, successful lateral movement is made easy with ligolo. 
+1Ligolo-ng uses a gVisor-based userland network stack plus a TUN interface to translate local packets into remote connections via an agent, making remote networks behave like directly routed ones and allowing tools like nmap to work without proxychains. Pivoting through segmented networks and subnets, successful lateral movement is made easy with ligolo. 
 Multi-hops are made easier with ligolo compared to imo proxy chains or ssh port forwarding ;) 
 
 [Ligolo agents releases can be downloaded  here (e.g. executables)](https://github.com/nicocha30/ligolo-ng/releases) 
@@ -14,6 +16,7 @@ Multi-hops are made easier with ligolo compared to imo proxy chains or ssh port 
 | Kali (attacker) | 192.168.xx.xxx  |
 | First Hop       | 192.168.111.137 |
 | Second Hop      | 10.10.111.13    |
+
 Through the First Hop -> I can access the Second Hop -> Through the second hop, I can access other addresses in the subnet 
 
 ### Setup Ligolo
