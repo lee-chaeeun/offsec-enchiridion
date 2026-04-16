@@ -4,9 +4,7 @@ Organised for fast lookup during the exam and labs.
 
  Don't Panic. Nobody exists on purpose, nobody belongs anywhere, everybody's gonna get pwned...and most importantly, I have my towel.
 
-_For personal study use only. All techniques documented here are intended for use in authorised environments. Always obtain proper written permission before testing any system._
-
-# Structure 
+# Repository Structure 
 ```
 offsec-enchiridion/
 ├──README.md
@@ -25,3 +23,9 @@ offsec-enchiridion/
 ├── 09-checklists/
 └── 10-cheatsheets/
 ```
+
+_For personal study use only. All techniques documented here are intended for use in authorised environments. Always obtain proper written permission before testing any system._
+
+### License
+
+This repository is licensed under the MIT License. See [LICENSE](./LICENSE).
