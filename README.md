@@ -21,6 +21,7 @@ offsec-enchiridion/
 ├── 07-active-directory/   
 ├── 08-tools/ 
 │   ├── ligolo-ng.md       
+│   ├── mimkatz.md       
 ├── 09-checklists/
 └── 10-cheatsheets/
 ```
