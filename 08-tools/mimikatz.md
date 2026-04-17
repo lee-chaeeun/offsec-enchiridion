@@ -479,6 +479,5 @@ Katzen sind süß, und vor allem finde ich Mona sehr nice, ein bekanntes ASCII-K
 　　　し' っ 　　　　　　　し' っ 　　　　　　し' っ 　　　　　　し' っ　
 
 ```
-
-<sub>source of <a href="[https://emojicombos.com/bunny](https://2ch-aa.blogspot.com/2018/06/625.html)"> katzen ascii art  </a></sub>
+<sub>source of <a href="https://2ch-aa.blogspot.com/2018/06/625.html"> katzen ascii art </a></sub>
 

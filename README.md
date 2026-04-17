@@ -1,6 +1,6 @@
 # offsec-enchiridion
 
-Organised for fast lookup during the exam and labs.
+Organised for fast lookup during the exam and labs. 
 
  Don't Panic. Nobody exists on purpose, nobody belongs anywhere, everybody's gonna get pwned...and most importantly, I have my towel.
 
@@ -18,8 +18,13 @@ offsec-enchiridion/
 ├── 06-privesc/
 ├── 07-active-directory/   
 ├── 08-tools/ 
+│   ├── crackmapexec.md     
 │   ├── ligolo-ng.md       
-│   ├── mimkatz.md       
+│   ├── mimkatz.md 
+│   ├── netexec.md     
+│   ├── scripts/
+│   |   ├──cme_bloop.sh
+│   |   ├──nxc_bloop.sh
 ├── 09-checklists/
 └── 10-cheatsheets/
 ```
