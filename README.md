@@ -25,6 +25,7 @@ offsec-enchiridion/
 │   ├── scripts/
 │   |   ├──cme_bloop.sh
 │   |   ├──nxc_bloop.sh
+│   |   ├──chmod_calc.sh
 ├── 09-checklists/
 │   ├── cmd-cheatsheet.md 
 └── 10-cheatsheets/
