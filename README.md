@@ -22,13 +22,17 @@ offsec-enchiridion/
 │   ├── ligolo-ng.md       
 │   ├── mimkatz.md 
 │   ├── netexec.md     
+│   ├── nmap.md  
+│   ├── tmux.md   
 │   ├── scripts/
-│   |   ├──cme_bloop.sh
-│   |   ├──nxc_bloop.sh
 │   |   ├──chmod_calc.sh
+│   |   ├──cme_bloop.sh
+│   |   ├──nmap_scan.sh
+│   |   ├──nxc_bloop.sh
 ├── 09-checklists/
 └── 10-cheatsheets/
 │   ├── cmd-cheatsheet.md 
+│   ├── port_numbers.md 
 ```
 
 _For personal study use only. All techniques documented here are intended for use in authorised environments. Always obtain proper written permission before testing any system._
