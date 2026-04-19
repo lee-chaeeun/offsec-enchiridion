@@ -27,8 +27,8 @@ offsec-enchiridion/
 │   |   ├──nxc_bloop.sh
 │   |   ├──chmod_calc.sh
 ├── 09-checklists/
-│   ├── cmd-cheatsheet.md 
 └── 10-cheatsheets/
+│   ├── cmd-cheatsheet.md 
 ```
 
 _For personal study use only. All techniques documented here are intended for use in authorised environments. Always obtain proper written permission before testing any system._
