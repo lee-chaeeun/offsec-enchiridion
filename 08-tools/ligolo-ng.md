@@ -9,7 +9,7 @@ Multi-hops are made easier with ligolo compared to imo proxy chains or ssh port 
 [Ligolo agents releases can be downloaded  here (e.g. executables)](https://github.com/nicocha30/ligolo-ng/releases) 
 - windows / linux versions are both downloadable 
 
-### Network Arch in Demo
+### Example network
 
 | Machine         | IP              |
 | --------------- | --------------- |

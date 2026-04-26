@@ -86,6 +86,14 @@ Available Protocols:
 
 NXC = maintained CME-style network execution and enumeration tool for Windows &AD
 
+### Example network
+
+| Machine         | IP              |
+| --------------- | --------------- |
+| Kali (attacker) | 192.168.xx.xxx  |
+| First Hop       | 192.168.111.137 |
+| Second Hop      | 10.10.111.13    |
+
 ### get netexec -ing
 
 ### SMB credential validation
