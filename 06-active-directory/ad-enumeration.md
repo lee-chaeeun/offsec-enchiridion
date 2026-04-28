@@ -314,7 +314,7 @@ DCSync rights
 
 ## LDAPSearch
 
-LDAP Search Helper Function - [[ldap_helper|]]  [ldap_search_helper.ps1](../03-tools/scripts/ldap_search_helper.ps1) & [get-ldapobjectproperties.ps1](../03-tools/scripts/get-ldapobjectproperties.ps1)
+LDAP Search Helper Function -  [ldap_search_helper.ps1](../03-tools/scripts/ldap_search_helper.ps1) & [get-ldapobjectproperties.ps1](../03-tools/scripts/get-ldapobjectproperties.ps1)
 
 - Accepts an LDAP query as a parameter.
 - Identifies the current domain’s PDC Emulator.
