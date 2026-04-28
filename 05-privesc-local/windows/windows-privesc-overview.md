@@ -14,7 +14,7 @@
 	   - registry, history, configs, saved creds
 
 3. [Services](#services)
-		[Enumerate Services](#enumerate-services)
+		[Enumerate Services](#enumerate-services) 
 	    [Enumerate Privileged Execution Paths](#enumerate-privileged-execution-paths)
 	    [Unquoted Service Paths](#unquoted-service-paths)
 	    [Writable Service Binary Abuse](#writable-service-binary-abuse)
