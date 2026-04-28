@@ -7,16 +7,15 @@ Organised for fast lookup during the exam and labs.
 # Repository Structure 
 ```bash
 offsec-enchiridion/
-├── 00-index.md
+├── 00-index.md # Decision tree
 ├── 01-methodology
-│   └── OSCP_Exam_Report_Template.md
-├── 02-enumeration
-├── 06-privesc
-│   ├── linux
-│   └── windows
-│       ├── Untitled.md
-│       └── token-impersonation.md
-├── 08-tools
+│   ├── OSCP_Exam_Report_Template.md
+│   └── initial-checklist.md # initial box pentest flow 
+├── 02-cheatsheets
+│   ├── cmd-cheatsheet.md
+│   └── port_numbers.md
+├── 03-tools
+│   ├── bloodhound.md
 │   ├── crackmapexec.md
 │   ├── evil-winrm.md
 │   ├── hashcat_johntheripper.md
@@ -25,15 +24,33 @@ offsec-enchiridion/
 │   ├── mimikatz.md
 │   ├── netexec.md
 │   ├── nmap.md
+│   ├── powerview.md
 │   ├── scripts
+│   │   ├── adduser.c
+│   │   ├── adduser.exe
 │   │   ├── chmod_calc.sh
 │   │   ├── cme_bloop.sh
+│   │   ├── dll_injection.cpp
+│   │   ├── get-ldapobjectproperties.ps1
+│   │   ├── ldap_search_helper.ps1
 │   │   ├── nmap_scan.sh
 │   │   └── nxc_bloop.sh
 │   └── tmux.md
-├── 10-cheatsheets
-│   ├── cmd-cheatsheet.md
-│   └── port_numbers.md
+├── 04-exploitation
+├── 05-privesc-local
+│   ├── linux
+│   │   └── linux-privesc-overview.md
+│   └── windows
+│       ├── dll-hijacking.md
+│       ├── scheduled-tasks.md.md
+│       ├── token-impersonation.md
+│       └── windows-privesc-overview.md
+├── 06-active-directory
+│   ├── ad-enumeration.md
+│   ├── domain-privesc.md
+│   ├── kerberos-attacks.md
+│   └── lateral-movement.md
+├── 07-post-exploitation
 ├── LICENSE
 └── README.md
 ```
