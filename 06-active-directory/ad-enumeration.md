@@ -145,7 +145,7 @@ Get-CimInstance Win32_ComputerSystem | Select-Object Domain,PartOfDomain
 | User groups        | May reveal delegated access           |
 | DNS suffix         | Helps build FQDNs and SPNs            |
 
-based on [nmap](../../03-tools/nmap.md) otuput
+based on [nmap](../03-tools/nmap.md) otuput
 ```text
 AD ports open → enum domain context  
 SMB open → users/shares/auth checks  
