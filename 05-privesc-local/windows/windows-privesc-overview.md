@@ -3,21 +3,25 @@
 
 ## Windows Privilege Escalation Pentest Flow
 
-1. [Initial Windows Enumeration](#initial-windows-enumeration)
+1. [Initial Windows Enumeration](#windows-enumeration)
+	   
 	   - [Initial Situation Awareness + Privilege Check](#initial-situation-awareness--privilege-check)
 	     - `whoami /all`, `systeminfo`, users, groups, privileges
 	   - [Domain & Network Context](#domain--network-context)
 
 2. [Search for Sensitive Files](#search-for-sensitive-files)
+
 	   - registry, history, configs, saved creds
 
 3. [Services](#services)
+
 	   - [Enumerate Services](#enumerate-services)
 	   - [Enumerate Privileged Execution Paths](#enumerate-privileged-execution-paths)
 	   - [Unquoted Service Paths](#unquoted-service-paths)
 	   - [Writable Service Binary Abuse](#writable-service-binary-abuse)
 
 4. [Privileged Execution Paths](#privileged-execution-paths)
+
 	   - [DLL Hijacking](#dll-hijacking)  -> more specific notes in [DLL Hijacking](./dll-hijacking.md)  
 	   - [Scheduled Tasks](#scheduled-tasks)  --> more specific notes in [scheduled-tasks](./scheduled-tasks.md)
 	   - [Token Impersonation](#token-impersonation) --> more specific notes in [token-impersonation](./token-impersonation.md)
@@ -25,8 +29,9 @@
 	   - [Startup Folder Checks](#startup-folder-checks)
 	   - [AlwaysInstallElevated](#`AlwaysInstallElevated`)
 
-5. [Active Directory Enumeration](#Active Directory Enumeration) --> more specific notes in  [ad-enumeration](../../06-active-directory/ad-enumeration.md)  
-6. [Automated Local Windows Enumeration](#automated-local-windows-enumeration) 
+5. [Active Directory Enumeration](#Active-Directory-Enumeration) --> more specific notes in  [ad-enumeration](../../06-active-directory/ad-enumeration.md)  
+6. [Automated Local Windows Enumeration](#automated-local-windowsenumeration) 
+
 		- `winpeas`, `seatbelt`, `powerup`
 
 
