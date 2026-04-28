@@ -4,11 +4,11 @@
 handy commands organised for quick reference 
 
 1. [File Transfer](#File-Transfer)
-	- [Kali -> Windows](#Kali -> Windows )
-	- [Windows -> Kali ](#Windows -> Kali  )
-	- [Linux -> Linux](#Linux -> Linux)
-2. [Windows cmd reference](#Windows cmd reference)
-3. [Linux cmd reference](#Linux cmd refernece)
+	- [Kali -> Windows](#Kali-->-Windows )
+	- [Windows -> Kali ](#Windows-->-Kali  )
+	- [Linux -> Linux](#Linux-->-Linux)
+2. [Windows cmd reference](#Windows-cmd-reference)
+3. [Linux cmd reference](#Linux-cmd-refernece)
 
 **Example Network**  
 
