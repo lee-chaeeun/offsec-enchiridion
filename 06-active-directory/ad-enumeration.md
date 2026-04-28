@@ -186,7 +186,7 @@ Set-MpPreference -DisableTamperProtection $true
 
 ### PowerView
 
-Refer to [PowerView](../../03-tools/powerview.md) for detailed notes
+Refer to [PowerView](../03-tools/powerview.md) for detailed notes
 
 ```bash
 └─$ pwd    
