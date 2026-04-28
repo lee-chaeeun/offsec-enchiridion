@@ -36,7 +36,7 @@ whoami /priv
 | `SeAssignPrimaryTokenPrivilege` enabled | May allow assigning a primary token to a process    | JuicyPotato                                                            | High            |
 | `SeBackupPrivilege` enabled             | Can read protected files such as registry hives     | Copy `SAM` / `SYSTEM`, dump local hashes                               | High            |
 | `SeRestorePrivilege` enabled            | Can write or restore files into protected locations | Replace protected files, service binary abuse, registry/file overwrite | High            |
-| `SeDebugPrivilege` enabled              | Can inspect or manipulate privileged processes      | [Mimikatz](../../08-tools/mimikatz.md), process token abuse            | High            |
+| `SeDebugPrivilege` enabled              | Can inspect or manipulate privileged processes      | [Mimikatz](../../03-tools/mimikatz.md), process token abuse            | High            |
 | `SeLoadDriverPrivilege` enabled         | Can load kernel drivers                             | Vulnerable driver abuse                                                | Medium          |
 | `SeTakeOwnershipPrivilege` enabled      | Can take ownership of files/objects                 | Take ownership, modify ACLs, replace files                             | Medium          |
 | `SeCreateTokenPrivilege` enabled        | Can create access tokens                            | Advanced token abuse                                                   | Rare / Advanced |
