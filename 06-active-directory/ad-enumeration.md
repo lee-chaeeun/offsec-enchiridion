@@ -314,7 +314,7 @@ DCSync rights
 
 ## LDAPSearch
 
-LDAP Search Helper Function - [[ldap_helper|]]  [ldap_search_helper.ps1](../../03-tools/scripts/ldap_search_helper.ps1) & [get-ldapobjectproperties.ps1](../../03-tools/scripts/get-ldapobjectproperties.ps1)
+LDAP Search Helper Function - [[ldap_helper|]]  [ldap_search_helper.ps1](../03-tools/scripts/ldap_search_helper.ps1) & [get-ldapobjectproperties.ps1](../03-tools/scripts/get-ldapobjectproperties.ps1)
 
 - Accepts an LDAP query as a parameter.
 - Identifies the current domain’s PDC Emulator.
@@ -484,7 +484,7 @@ LDAPSearch -LDAPQuery "(&(objectCategory=group)(cn=Domain Admins))"
 
 ### BloodHound
 
-Refer to [bloodhound](../../03-tools/bloodhound.md) for more detailed notes 
+Refer to [bloodhound](../03-tools/bloodhound.md) for more detailed notes 
 
 ```bash
 └─$ wget https://github.com/SpecterOps/SharpHound/releases/download/v1.1.0/SharpHound-v1.1.0.zip
