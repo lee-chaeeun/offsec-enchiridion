@@ -251,17 +251,32 @@ MATCH p = shortestPath((n)-[*1..]->(g:Group {name:'DOMAIN ADMINS@DOMAIN.LOCAL'})
 RETURN p
 ```
 
-| Finding               | Use                                      | Manual Validation                     |
-| --------------------- | ---------------------------------------- | ------------------------------------- |
-| `AdminTo`             | User/group has local admin on a computer | Test SMB/WinRM/admin access carefully |
-| `HasSession`          | User has active session on a host        | Confirm host reachability and access  |
-| `MemberOf`            | Nested group membership path             | Validate with LDAP/PowerView          |
-| `GenericAll`          | Full control over object                 | Validate ACLs before abuse            |
-| `GenericWrite`        | Can modify object attributes             | Validate possible abuse path          |
-| `WriteDacl`           | Can modify object ACL                    | Confirm control path                  |
-| `AddMember`           | Can add user to group                    | Check group impact                    |
-| `ForceChangePassword` | Can reset another user’s password        | Confirm scope and consequences        |
-| `DCSync`              | Can replicate directory secrets          | Very high impact; validate carefully  |
+| Finding / Edge        | Use                                                | Manual Validation                                 |  Notes                                                         |
+| --------------------- | -------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------- |
+| `AdminTo`             | User/group has local admin on a computer           | Test SMB/WinRM/admin access carefully             | [lateral-movement](../06-active-directory/lateral-movement.md) |
+| `HasSession`          | User has active session on a host                  | Confirm host reachability and access              | [lateral-movement](../06-active-directory/lateral-movement.md) |
+| `MemberOf`            | Nested group membership path                       | Validate with LDAP/PowerView                      | [ad-enumeration](../06-active-directory/ad-enumeration.md)     |
+| `GenericAll`          | Full control over object                           | Validate ACLs before abuse                        | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `GenericWrite`        | Can modify object attributes                       | Validate possible abuse path                      | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `WriteDacl`           | Can modify object ACL                              | Confirm control path                              | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `WriteOwner`          | Can take ownership of object                       | Confirm owner/ACL abuse path                      | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `Owns`                | Principal owns target object                       | Check if ownership allows ACL change              | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `AddMember`           | Can add user to group                              | Check group impact                                | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `AddSelf`             | Can add self to group                              | Check group impact + re-login/ticket refresh      | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `ForceChangePassword` | Can reset another user’s password                  | Confirm scope and consequences                    | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `AllExtendedRights`   | May include extended rights such as password reset | Identify exact extended right                     | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `DCSync`              | Can replicate directory secrets                    | Very high impact; validate carefully              | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `ReadLAPSPassword`    | Can read LAPS local admin password                 | Check target computer and local admin access      | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `ReadGMSAPassword`    | Can read gMSA password material                    | Check where gMSA is used                          | [domain-privesc](../06-active-directory/domain-privesc.md)     |
+| `Kerberoastable`      | User has SPN set                                   | Request TGS + crack offline                       | [kerberos-attacks](../06-active-directory/kerberos-attacks.md) |
+| `ASREPRoastable`      | User has Kerberos pre-auth disabled                | Request AS-REP + crack offline                    | [kerberos-attacks](../06-active-directory/kerberos-attacks.md) |
+| `AllowedToDelegate`   | Account trusted for delegation                     | Validate delegation type + SPN                    | [kerberos-attacks](../06-active-directory/kerberos-attacks.md) |
+| `AllowedToAct`        | RBCD relationship exists                           | Validate controlled account + target service      | [kerberos-attacks](../06-active-directory/kerberos-attacks.md) |
+| `AddAllowedToAct`     | Can modify RBCD on target computer                 | Validate write rights over target computer object | [kerberos-attacks](../06-active-directory/kerberos-attacks.md) |
+| `CanRDP`              | Principal can RDP to host                          | Confirm RDP open + creds valid                    | [lateral-movement](../06-active-directory/lateral-movement.md) |
+| `CanPSRemote`         | Principal can use PowerShell Remoting / WinRM      | Confirm WinRM open + access works                 | [lateral-movement](../06-active-directory/lateral-movement.md) |
+| `ExecuteDCOM`         | Principal may execute via DCOM                     | Confirm access and service availability           | [lateral-movement](../06-active-directory/lateral-movement.md) |
+| `SQLAdmin`            | Principal has admin rights over MSSQL              | Validate MSSQL access and role                    | [lateral-movement](../06-active-directory/lateral-movement.md) |
 
 Record for each useful path: 
 ```text

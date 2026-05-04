@@ -18,7 +18,7 @@ AD Privilege Escalation Flow
 8. Record evidence
 
 
-| BloodHound Edge / Finding  | Use                               | Relevant Abuse                     |
+| BloodHound Edge / Finding  | What It Means                     | Relevant Abuse                     |
 | -------------------------- | --------------------------------- | ---------------------------------- |
 | `GenericAll` over user     | Full control over user            | Reset password / set SPN           |
 | `GenericAll` over group    | Full control over group           | Add member                         |
@@ -338,7 +338,6 @@ impacket-secretsdump domain.local/alice:'alice_password'@dc01.domain.local -just
 
 
 GPO control 
-
 ```text
 GenericAll over GPO  
 GenericWrite over GPO  
