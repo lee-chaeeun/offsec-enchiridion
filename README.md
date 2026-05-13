@@ -7,20 +7,23 @@ Organised for fast lookup during the exam and labs.
 # Repository Structure 
 ```bash
 offsec-enchiridion/
-├── 00-index.md # Decision tree
+├── 00-index.md
 ├── 01-methodology
 │   ├── OSCP_Exam_Report_Template.md
-│   └── initial-checklist.md # initial box pentest flow 
+│   └── initial-checklist.md
 ├── 02-cheatsheets
 │   ├── cmd-cheatsheet.md
 │   └── port_numbers.md
 ├── 03-tools
 │   ├── bloodhound.md
+│   ├── burp.md
 │   ├── crackmapexec.md
 │   ├── evil-winrm.md
+│   ├── gobuster.md
 │   ├── hashcat_johntheripper.md
 │   ├── impacket.md
 │   ├── ligolo-ng.md
+│   ├── metasploit.md
 │   ├── mimikatz.md
 │   ├── netexec.md
 │   ├── nmap.md
@@ -37,12 +40,19 @@ offsec-enchiridion/
 │   │   └── nxc_bloop.sh
 │   └── tmux.md
 ├── 04-exploitation
+│   ├── databases
+│   │   └── SQL-injection.md
+│   ├── email
+│   │   └── phishing.md
+│   ├── reverse-shell.md
+│   └── web
+│       └── web-app-attack.md
 ├── 05-privesc-local
 │   ├── linux
 │   │   └── linux-privesc-overview.md
 │   └── windows
 │       ├── dll-hijacking.md
-│       ├── scheduled-tasks.md.md
+│       ├── scheduled-tasks.md
 │       ├── token-impersonation.md
 │       └── windows-privesc-overview.md
 ├── 06-active-directory
@@ -52,8 +62,11 @@ offsec-enchiridion/
 │   └── lateral-movement.md
 ├── 07-post-exploitation
 │   └── pivoting.md
+├── 08-cloud
+│   └── aws-overview.md
 ├── LICENSE
-└── README.md
+├── README.md
+└── figures
 ```
 
 _For personal study use only. All techniques documented here are intended for use in authorised environments. Always obtain proper written permission before testing any system._
