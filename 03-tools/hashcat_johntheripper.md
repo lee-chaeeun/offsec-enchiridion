@@ -13,6 +13,7 @@
 Useful references:
 - [Hashcat example hashes from hashcat wiki](https://hashcat.net/wiki/doku.php?id=example_hashes)
 - [github repo table with example hashes for hashcat](https://gist.github.com/CalfCrusher/6b87a738d0fe7b88e04f4a36eb6d722d)
+- [online hash identifier](https://hashes.com/en/tools/hash_identifier)
 
 | Pattern | Likely Meaning |
 |---|---|
@@ -73,6 +74,8 @@ If the extracted material contains stray spaces or line breaks, clean it first.
 | DCC / MS Cache                                |         1100 |
 | DCC2 / MS Cache 2                             |         2100 |
 | Kerberos 5, etype 23, TGS-REP (Kerberoasting) |        13100 |
+| Kerberos 5, etype 17, TGS-REP                 |        19600 |
+| Kerberos 5, etype 18, TGS-REP                 |        19700 |
 | Kerberos 5, etype 23, AS-REQ Pre-Auth         |         7500 |
 | Kerberos 5, etype 23, AS-REP                  |        18200 |
 | WPA-PBKID-PMKID+EAPOL                         |        22000 |

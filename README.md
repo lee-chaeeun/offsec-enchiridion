@@ -51,6 +51,7 @@ offsec-enchiridion/
 │   ├── kerberos-attacks.md
 │   └── lateral-movement.md
 ├── 07-post-exploitation
+│   └── pivoting.md
 ├── LICENSE
 └── README.md
 ```

