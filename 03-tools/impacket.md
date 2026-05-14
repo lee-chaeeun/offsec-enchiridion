@@ -632,6 +632,38 @@ impacket-findDelegation domain.com/username:password -dc-ip target_ip
 
 
 
+### `impacket-rpcdump`
+
+RPC can help enumerate:
+- domain users
+- domain groups
+- local users
+- password policy
+- shares indirectly
+- domain SID
+- logged-on / session-related info sometimes
+- workstation/domain info
+- RID cycling when allowed
+
+go to [rpc](rpc.md) for more detailed notes
+
+Common ports:
+```bash
+135/tcp msrpc
+139/tcp netbios-ssn  
+445/tcp microsoft-ds
+```
+
+```bash
+impacket-rpcdump target_ip
+impacket-rpcdump domain.com/username:'password'@target_ip
+```
+Use:
+- identify exposed RPC interfaces
+- support attack surface analysis
+- useful when port `135` is open but you are unsure what is exposed
+
+
 -----
 ## Related notes
 
