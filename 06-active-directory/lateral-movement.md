@@ -540,6 +540,129 @@ EXEC xp_cmdshell 'whoami';
 
 ---
 
+## PCAP analysis 
+
+PCAP files can contain useful lateral movement clues:  
+- plaintext credentials  
+- internal hostnames  
+- internal IPs  
+- service usage  
+- authentication attempts  
+- HTTP requests  
+- SMB / LDAP / Kerberos traffic  
+- target discovery hints
+
+Useful when:  
+- you find `.pcap` / `.pcapng` files on a compromised host  
+- packet captures are stored in user folders  
+- admin/debug tools left traffic captures behind  
+- you need more internal targets or credentials
+
+
+```powershell
+# Find PCAP Files on Windows
+Get-ChildItem C:\Users -Recurse -Include *.pcap,*.pcapng -ErrorAction SilentlyContinue
+# broader search
+Get-ChildItem C:\ -Recurse -Include *.pcap,*.pcapng -ErrorAction SilentlyContinue
+# cmd
+dir C:\*.pcap* /s /b
+
+# Copy PCAP to Kali
+Copy-Item "C:\Users\Path\To\capture.pcapng" -Destination "m:\capture.pcapng"
+# cmd
+copy C:\Users\Path\To\capture.pcapng m:\
+```
+
+Look for
+- internal IP ranges
+- frequently contacted hosts
+- domain controllers
+- web servers
+- SMB servers
+- unusual ports
+- plaintext protocols
+
+```bash
+# basic capture info
+capinfos capture.pcapng
+
+# list protocols seen
+tshark -r capture.pcapng -q -z io,phs
+
+# show conversations
+tshark -r capture.pcapng -q -z conv,ip
+
+# show TCP conversations
+tshark -r capture.pcapng -q -z conv,tcp
+
+# filter interesting protocols
+tshark -r capture.pcapng -Y "ftp"
+tshark -r capture.pcapng  -Y "ftp || telnet || smb || ldap || kerberos"
+
+# list HTTP request 
+tshark -r capture.pcapng -Y "http.request" -T fields -e ip.src -e ip.dst -e http.host -e http.request.method -e http.request.uri
+
+# list POST request
+tshark -r capture.pcapng  -Y "http.request.method == POST"
+
+# Show POST request fields:
+tshark -r capture.pcapng  -Y "tls.handshake.extensions_server_name" -T fields -e ip.src -e ip.dst -e tls.handshake.extensions_server_name
+
+# Search for auth headers:
+tshark -r capture.pcapng  -Y "http.request.method == POST" -Y "http.authorization" -T fields -e ip.src -e ip.dst -e http.host -e http.authorization
+
+# Search for login-related HTTP content:
+tshark -r capture.pcapng -Y 'http contains "user" || http contains "username" || http contains "pass" || http contains "password" || http contains "login"'
+
+# Read specfic frame 
+tshark -r capture.pcapng -Y "frame.number == NUM" -V | less
+```
+
+```bash
+# Credential Hunting Quick Filters
+tshark -r capture.pcapng -Y 'frame contains "password"'
+tshark -r capture.pcapng -Y 'frame contains "username"'
+tshark -r capture.pcapng -Y 'frame contains "Authorization"'
+tshark -r capture.pcapng -Y 'frame contains "Basic"'
+tshark -r capture.pcapng -Y 'frame contains "Bearer"'
+
+# Case-insensitive string search with `strings`:
+strings capture.pcapng | grep -Ei "user|username|pass|password|login|token|authorization|bearer|basic"
+```
+
+```bash
+# HTTP Basic Auth may expose base64 credentials.  
+# Decode manually if found.
+echo 'base64_value' | base64 -d
+```
+
+```bash
+# TLS / HTTPS hostnames
+tshark -r capture.pcapng -Y "tls.handshake.extensions_server_name" -T fields -e ip.src -e ip.dst -e tls.handshake.extensions_server_name
+
+# list DNS queries
+tshark -r capture.pcapng -Y "dns.qry.name" -T fields -e ip.src -e ip.dst -e dns.qry.name
+
+# list unique names
+tshark -r capture.pcapng -Y "dns.qry.name" -T fields -e dns.qry.name | sort -u
+
+# SMB / Windows Host discovery
+# show smb2 filenames
+tshark -r capture.pcapng -Y "smb2.filename" -T fields -e ip.src -e ip.dst -e smb2.filename
+
+# show NTLM SSP usernames/domains if present
+tshark -r capture.pcapng -Y "ntlmssp.auth.username" -T fields -e ip.src -e ip.dst -e ntlmssp.auth.domain -e ntlmssp.auth.username
+
+# LDAP
+# unencrypted
+tshark -r capture.pcapng -Y "ldap.simple"
+
+# Kerberos useful
+tshark -r capture.pcapng -Y "kerberos.CNameString" -T fields -e ip.src -e ip.dst -e kerberos.CNameString
+```
+
+---
+
 Troubleshooting
 
 ```text

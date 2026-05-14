@@ -202,6 +202,21 @@ http://dev.domain.com
 # DNS Enumeration
 # Use when DNS is in scope and a domain is known.
 gobuster dns -d domain.com \-w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt \-t 10
+
+
+# Add Cookies or Headers
+gobuster dir -u http://target_ip/ \
+-w /usr/share/wordlists/dirb/common.txt \
+-H "Cookie: session=session_value" \
+-t 10
+
+# Custom Host header:
+gobuster dir -u http://target_ip/ \
+-w /usr/share/wordlists/dirb/common.txt \
+-H "Host: target.com" \
+-t 10
+
+
 ```
 
 ## Extension Strategy

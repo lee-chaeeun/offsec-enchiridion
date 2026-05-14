@@ -831,6 +831,17 @@ good practice
 ```
 
 
+### cross-compile
+
+```bash
+└─$ searchsploit "Search Term"  
+└─$ searchsploit -m exploit_num     
+
+# compile code into Win Portable Executable (PE)  
+└─$ i686-w64-mingw32-gcc exploit.c -o exploit.exe
+```
+
+
 ### activate python env
 
 ```bash
