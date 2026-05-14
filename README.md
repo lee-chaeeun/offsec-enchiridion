@@ -16,6 +16,7 @@ offsec-enchiridion/
 │   └── port_numbers.md
 ├── 03-tools
 │   ├── bloodhound.md
+│   ├── brute-force.md
 │   ├── burp.md
 │   ├── crackmapexec.md
 │   ├── evil-winrm.md
@@ -67,6 +68,7 @@ offsec-enchiridion/
 ├── LICENSE
 ├── README.md
 └── figures
+
 ```
 
 _For personal study use only. All techniques documented here are intended for use in authorised environments. Always obtain proper written permission before testing any system._
