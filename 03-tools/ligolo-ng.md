@@ -167,6 +167,18 @@ And you can just keep hopping away...
 
 ---
 
+## Troubleshooting
+
+```bash
+ip addr show       
+...
+7: ligolo: ...
+8: ligolo1: ...
+```
+
+
+---
+
 ```text
   /)/)
 ( . .)

@@ -381,6 +381,38 @@ Common mistake:
 - forgetting that successful credentials may automatically create a session
 - using large wordlists when a smaller targeted list would be more appropriate
 
+
+#### Example: tftpbrute
+
+https://medium.com/@aashutos.katare/silent-servers-the-art-of-tftp-enumeration-265c3785a6b4
+
+```bash
+└─$ tftp TARGET_IP 
+```
+
+```bash
+└─$ msfconsole      
+
+msf6 > use auxiliary/scanner/tftp/tftpbrute
+msf6 auxiliary(scanner/tftp/tftpbrute) > set RHOSTS TARGET_IP
+msf6 auxiliary(scanner/tftp/tftpbrute) > run
+[+] Found filename.cfg on TARGET_IP
+[+] Found filename_1.cfg on TARGET_IP
+[+] Found filename_2.cfg on TARGET_IP
+[+] Found filename-confg on TARGET_IP
+[*] Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+
+msf6 auxiliary(scanner/tftp/tftpbrute) > exit
+```
+
+```bash
+└─$  tftp filename 
+tftp> get filename.cfg
+tftp> quit
+```
+
+
 ---
 
 ## Exploit Modules

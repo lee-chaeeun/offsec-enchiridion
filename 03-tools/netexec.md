@@ -88,11 +88,11 @@ NXC = maintained CME-style network execution and enumeration tool for Windows &A
 
 ### Example network
 
-| Machine         | IP              |
-| --------------- | --------------- |
-| Kali (attacker) | 192.168.xx.xxx  |
-| First Hop       | 192.168.111.137 |
-| Second Hop      | 10.10.111.13    |
+| Machine         | IP             |
+| --------------- | -------------- |
+| Kali (attacker) | 192.168.xx.xxx |
+| First Hop       | TARGET_IP      |
+
 
 ### get netexec -ing
 
@@ -101,34 +101,34 @@ NXC = maintained CME-style network execution and enumeration tool for Windows &A
 **Single user credential check on single host**
 
 ```bash
-netexec smb 192.168.111.137 -u username -p 'password'
+netexec smb TARGET_IP -u username -p 'password'
 
-SMB  192.168.111.137  445  <HOSTNAME>  [*] Windows 10 / Server 2019 Build 19041 x64 (name:<HOSTNAME>) (domain:<DOMAIN>) (signing:False) (SMBv1:False)  
-SMB  192.168.111.137  445  <HOSTNAME>  [+] <DOMAIN>\username:password
+SMB  TARGET_IP  445  <HOSTNAME>  [*] Windows 10 / Server 2019 Build 19041 x64 (name:<HOSTNAME>) (domain:<DOMAIN>) (signing:False) (SMBv1:False)  
+SMB  TARGET_IP  445  <HOSTNAME>  [+] <DOMAIN>\username:password
 ```
 
 Local authentication 
 ```bash
-netexec smb 192.168.111.137 -u username -p 'password' --local-auth
+netexec smb TARGET_IP -u username -p 'password' --local-auth
 ```
 
 domain authentication
 ```bash
-netexec smb 192.168.111.137 -u username -p 'password' -d <DOMAIN>
+netexec smb TARGET_IP -u username -p 'password' -d <DOMAIN>
 ```
 
 ### SMB shares enumeration
 
 ```bash
-netexec smb 192.168.111.137 -u username -p 'password' --shares
+netexec smb TARGET_IP -u username -p 'password' --shares
 
 
-SMB  192.168.111.137  445  <HOSTNAME>  [+] <DOMAIN>\username:password (Pwn3d!)  
-SMB  192.168.111.137  445  <HOSTNAME>  [+] Enumerated shares  
-SMB  192.168.111.137  445  <HOSTNAME>  Share    Permissions  Remark  
-SMB  192.168.111.137  445  <HOSTNAME>  ADMIN$   READ,WRITE   Remote Admin  
-SMB  192.168.111.137  445  <HOSTNAME>  C$       READ,WRITE   Default share  
-SMB  192.168.111.137  445  <HOSTNAME>  IPC$     READ         Remote IPC
+SMB  TARGET_IP  445  <HOSTNAME>  [+] <DOMAIN>\username:password (Pwn3d!)  
+SMB  TARGET_IP  445  <HOSTNAME>  [+] Enumerated shares  
+SMB  TARGET_IP  445  <HOSTNAME>  Share    Permissions  Remark  
+SMB  TARGET_IP  445  <HOSTNAME>  ADMIN$   READ,WRITE   Remote Admin  
+SMB  TARGET_IP  445  <HOSTNAME>  C$       READ,WRITE   Default share  
+SMB  TARGET_IP  445  <HOSTNAME>  IPC$     READ         Remote IPC
 ```
 
 other protocols 
@@ -164,37 +164,37 @@ netexec smb target_ip --users
 [`nxc_bloop.sh`](./scripts/nxc_bloop.sh) to loop through different commands more easily! 
 
 ```bash
-./nxc_bloop.sh -t 192.168.111.137 -P smb,winrm -u alice -p 'password'
+./nxc_bloop.sh -t TARGET_IP -P smb,winrm -u alice -p 'password'
 ```
 
 domain auth
 ```bash
-./nxc_bloop.sh -t 192.168.111.137 -P smb,ldap,rdp -u alice -p 'password' --auth domain -d domain.com
+./nxc_bloop.sh -t TARGET_IP -P smb,ldap,rdp -u alice -p 'password' --auth domain -d domain.com
 ```
 
 local auth
 ```bash
-./nxc_bloop.sh -t 192.168.111.137 -P smb,winrm -u administrator -p 'password' --auth local
+./nxc_bloop.sh -t TARGET_IP -P smb,winrm -u administrator -p 'password' --auth local
 ```
 
 usernames.txt + single password
 ```bash
-./nxc_bloop.sh -t 192.168.111.137 -P smb,ldap -U usernames.txt -p 'password' --auth domain -d domain.com
+./nxc_bloop.sh -t TARGET_IP -P smb,ldap -U usernames.txt -p 'password' --auth domain -d domain.com
 ```
 
 single username + passwords.txt
 ```bash
-./nxc_bloop.sh -t 192.168.111.137 -P smb,rdp -u alice -W passwords.txt --auth domain -d domain.com
+./nxc_bloop.sh -t TARGET_IP -P smb,rdp -u alice -W passwords.txt --auth domain -d domain.com
 ```
 
 usernames.txt + passwords.txt
 ```bash
-./nxc_bloop.sh -t 192.168.111.137 -P smb -U usernames.txt -W passwords.txt --auth domain -d domain.com --continue-on-success
+./nxc_bloop.sh -t TARGET_IP -P smb -U usernames.txt -W passwords.txt --auth domain -d domain.com --continue-on-success
 ```
 
 exact username:password combos
 ```bash
-./nxc_bloop.sh -t 192.168.111.137 -P smb,winrm -C combos.txt --auth domain -d domain.com
+./nxc_bloop.sh -t TARGET_IP -P smb,winrm -C combos.txt --auth domain -d domain.com
 ```
 
 ```bash
@@ -206,14 +206,31 @@ eve:apples
 
 log output to a file
 ```bash
-./nxc_bloop.sh -t 192.168.111.137 -P smb,winrm -u alice -p 'password' --auth domain -d domain.com --log nxc_results.log
+./nxc_bloop.sh -t TARGET_IP -P smb,winrm -u alice -p 'password' --auth domain -d domain.com --log nxc_results.log
 ```
 
 change timeout to prevent wasting time on a service that hangs and/or is filtered
 ```bash
-./nxc_bloop.sh -t 192.168.111.137 -P smb,ldap,mssql -u alice -p 'password' --auth domain -d domain.com --timeout 15
+./nxc_bloop.sh -t TARGET_IP -P smb,ldap,mssql -u alice -p 'password' --auth domain -d domain.com --timeout 15
 ```
 
+`--all` flag
+```bash
+./nxc_bloop.sh -t TARGET_IP --all -u admin -p 'Pass123!'
+```
+
+Obsidian markdown output
+```bash
+./nxc_bloop.sh -t TARGET_IP --all -C creds.txt --auth domain -d domain.com \
+  --continue-on-success \
+  --log-markdown ~/oscp/nxc_output.md
+```
+
+`--successes-only`
+```bash
+./nxc_bloop.sh -t TARGET_IP --all -C combos.txt \
+  --successes-only --log-markdown ~/obsidian/vault/pwk/hits.md
+```
 
 ### Password policy
 

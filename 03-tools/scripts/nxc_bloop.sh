@@ -13,7 +13,8 @@ Targets:
 
 Protocols:
   -P, --protocols <p1,p2,...>          Example: smb,winrm,ldap
-  Supported: smb, winrm, ldap, mssql, ssh, ftp, vnc, wmi
+  Supported: smb, winrm, ldap, mssql, ssh, ftp, vnc, wmi, rdp
+      --all                            Run all supported protocols
 
 Credential modes (choose one):
   -u, --username <user>                Single username
@@ -30,7 +31,9 @@ Auth context:
 Options:
       --timeout <sec>                  Per-command timeout (default: 30)
       --continue-on-success            Add --continue-on-success where supported
-      --log <file>                     Append output to a log file
+      --log <file>                     Append raw output to a log file
+      --log-markdown <file>            Append output wrapped in a bash code block (Obsidian-ready)
+      --successes-only                 Print/log only successful hits ([+] lines, filters [-] noise)
       --dry-run                        Print commands without executing
   -h, --help                           Show this help
 
@@ -62,12 +65,13 @@ trim() {
     printf '%s' "$s"
 }
 
-# NetExec supports: smb, winrm, ldap, mssql, ssh, ftp, vnc, wmi
-# RDP was dropped from nxc; VNC and WMI are new additions.
+# NetExec supports: smb, winrm, ldap, mssql, ssh, ftp, vnc, wmi, rdp
+ALL_PROTOCOLS=(smb winrm ldap mssql ssh ftp vnc wmi rdp)
+
 is_supported_proto() {
     local proto="$1"
     case "$proto" in
-        smb|winrm|ldap|mssql|ssh|ftp|vnc|wmi) return 0 ;;
+        smb|winrm|ldap|mssql|ssh|ftp|vnc|wmi|rdp) return 0 ;;
         *) return 1 ;;
     esac
 }
@@ -76,7 +80,7 @@ is_supported_proto() {
 supports_domain_flag() {
     local proto="$1"
     case "$proto" in
-        smb|ldap|winrm|mssql|wmi) return 0 ;;
+        smb|ldap|winrm|mssql|wmi|rdp) return 0 ;;
         *) return 1 ;;
     esac
 }
@@ -117,16 +121,38 @@ run_cmd() {
         return 0
     fi
 
-    if [[ -n "${LOG_FILE:-}" ]]; then
-        timeout "$TIMEOUT" "${cmd[@]}" | tee -a "$LOG_FILE" || log "[!] $proto check failed or timed out"
+    # Capture output then filter/log as needed
+    local raw_output
+    raw_output="$(timeout "$TIMEOUT" "${cmd[@]}" 2>&1)" || {
+        [[ "$SUCCESSES_ONLY" -eq 0 ]] && log "[!] $proto check failed or timed out"
+        return 0
+    }
+
+    local display_output
+    if [[ "$SUCCESSES_ONLY" -eq 1 ]]; then
+        # Keep only [+] lines (valid creds / Pwn3d!) and strip [-] noise
+        display_output="$(echo "$raw_output" | grep -E '^\[?\+\]')"
     else
-        timeout "$TIMEOUT" "${cmd[@]}" || log "[!] $proto check failed or timed out"
+        display_output="$raw_output"
+    fi
+
+    [[ -z "$display_output" ]] && return 0
+
+    echo "$display_output"
+
+    if [[ -n "${LOG_FILE:-}" ]]; then
+        echo "$display_output" >> "$LOG_FILE"
+    fi
+
+    if [[ -n "${LOG_MARKDOWN:-}" ]]; then
+        echo "$display_output" >> "$LOG_MARKDOWN"
     fi
 }
 
 # Defaults
 TARGET=""
 PROTO_LIST=""
+USE_ALL_PROTOCOLS=0
 USERNAME=""
 PASSWORD=""
 USERFILE=""
@@ -137,12 +163,15 @@ DOMAIN=""
 TIMEOUT=30
 CONTINUE_ON_SUCCESS=0
 LOG_FILE=""
+LOG_MARKDOWN=""
+SUCCESSES_ONLY=0
 DRY_RUN=0
 
 # Parse args
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -t|--target)            TARGET="$2";       shift 2 ;;
+        --all)                  USE_ALL_PROTOCOLS=1; shift ;;
         -P|--protocols)         PROTO_LIST="$2";   shift 2 ;;
         -u|--username)          USERNAME="$2";     shift 2 ;;
         -p|--password)          PASSWORD="$2";     shift 2 ;;
@@ -154,19 +183,27 @@ while [[ $# -gt 0 ]]; do
         --timeout)              TIMEOUT="$2";      shift 2 ;;
         --continue-on-success)  CONTINUE_ON_SUCCESS=1; shift ;;
         --log)                  LOG_FILE="$2";     shift 2 ;;
+        --log-markdown)         LOG_MARKDOWN="$2"; shift 2 ;;
+        --successes-only)       SUCCESSES_ONLY=1;  shift ;;
         --dry-run)              DRY_RUN=1;         shift ;;
         -h|--help)              usage; exit 0 ;;
         *) die "Unknown option: $1" ;;
     esac
 done
 
-[[ -n "$TARGET" ]]    || die "Target is required."
-[[ -n "$PROTO_LIST" ]] || die "Protocols are required."
+[[ -n "$TARGET" ]] || die "Target is required."
+
+# --all expands to every supported protocol; -P is then optional
+if [[ "$USE_ALL_PROTOCOLS" -eq 1 ]]; then
+    PROTO_LIST="$(IFS=','; echo "${ALL_PROTOCOLS[*]}")"
+fi
+
+[[ -n "$PROTO_LIST" ]] || die "Protocols are required. Use -P <protos> or --all."
 
 IFS=',' read -ra SERVICES <<< "$PROTO_LIST"
 for svc in "${SERVICES[@]}"; do
     svc="$(trim "$svc")"
-    is_supported_proto "$svc" || die "Unsupported protocol: $svc. Supported: smb, winrm, ldap, mssql, ssh, ftp, vnc, wmi"
+    is_supported_proto "$svc" || die "Unsupported protocol: $svc. Supported: smb, winrm, ldap, mssql, ssh, ftp, vnc, wmi, rdp"
 done
 
 if [[ -n "$AUTH_TYPE" ]] && [[ "$AUTH_TYPE" != "domain" && "$AUTH_TYPE" != "local" ]]; then
@@ -210,6 +247,16 @@ if [[ -z "$COMBO_FILE" ]]; then
     fi
 fi
 
+# Open markdown code block if --log-markdown is set
+if [[ -n "$LOG_MARKDOWN" ]]; then
+    {
+        echo "# nxc spray — $(date '+%Y-%m-%d %H:%M:%S')"
+        echo "Target: \`$TARGET\` | Protocols: \`$PROTO_LIST\`"
+        echo ""
+        echo '```bash'
+    } >> "$LOG_MARKDOWN"
+fi
+
 # Execution
 if [[ -n "$COMBO_FILE" ]]; then
     while IFS= read -r line || [[ -n "$line" ]]; do
@@ -239,4 +286,11 @@ else
             done
         done
     done
+fi
+
+# Close markdown code block
+if [[ -n "$LOG_MARKDOWN" ]]; then
+    echo '```' >> "$LOG_MARKDOWN"
+    echo "" >> "$LOG_MARKDOWN"
+    log "[*] Markdown log written to: $LOG_MARKDOWN"
 fi
