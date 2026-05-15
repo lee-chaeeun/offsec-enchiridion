@@ -144,7 +144,17 @@ net user
 net localgroup Administrators  
 ``` 
 
+```powershell
+# inspect the password policy:
+net accounts
 
+secedit /export /cfg C:\Users\Public\secpol.cfg  
+
+type C:\Users\Public\secpol.cfg | findstr /i "PasswordComplexity MinimumPasswordLength PasswordHistorySize"
+
+PasswordComplexity = 1 -> complexity enabled  
+PasswordComplexity = 0 -> complexity disabled
+```
 
 ### JuicyPotato
 

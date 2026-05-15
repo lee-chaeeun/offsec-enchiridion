@@ -113,6 +113,29 @@ icacls "C:\Program Files\Backup Service\backup.bat"
 icacls "C:\Program Files\Backup Service"
 ```
 
+```powershell
+# Find the scheduled task task name
+schtasks /query /fo LIST /v | findstr /i "TaskName"
+
+schtasks /query /tn "task_name" /fo LIST /v
+
+# run task
+schtasks /run /tn "task_name"
+
+# view when run if access denied
+schtasks /query /tn "task_name" /fo LIST /v
+
+# Set `LogFilePath` to the target binary
+# tells TaskName to modify permissions on `task_name.exe` when it runs:
+reg add "HKLM\SOFTWARE\TaskName" /v "TaskName" /t REG_SZ /d "C:\Backup\backup.exe" /f /reg:64
+
+# Verify
+reg query "HKLM\SOFTWARE\TaskName" /v TaskName /reg:64
+
+HKEY_LOCAL_MACHINE\SOFTWARE\TaskName
+    LogFilePath    REG_SZ    C:\Backup\backup.exe
+```
+
 | Field           | Example                                      | Use                             |
 | --------------- | -------------------------------------------- | ------------------------------- |
 | `TaskName`      | `\BackupTask`                                | Task to investigate.            |

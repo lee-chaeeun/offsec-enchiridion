@@ -588,6 +588,15 @@ find /home -name "authorized_keys" 2>/dev/null
 find /home -name "known_hosts" 2>/dev/null
 ```
 
+```bash
+# useful old-BSD-friendly searches:
+/usr/bin/find / -name "passwd" -print
+/usr/bin/find / -name "shadow" -print
+/usr/bin/find / -name "*ingres*" -print
+/usr/bin/find / -name "*Ingres*" -print
+/usr/bin/find / -perm -4000 -print
+```
+
 - `su` to another user
 - SSH as another user
 - sudo with a discovered password

