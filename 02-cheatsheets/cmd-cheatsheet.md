@@ -17,6 +17,66 @@ handy commands organised for quick reference
 | Kali (attacker) | 192.168.xx.xxx   |
 | Alice (target)  | 192.168.111.137  |
 
+## Quick Enumeration
+
+fast loop script through multiple hosts
+nmap loop with tmux using [`nmap_scan.sh`](../03-tools/scripts/nmap_scan.sh)
+```bash
+└─$ chmod +x nmap_scan.sh
+└─$ ./nmap_scan.sh --targets targets.txt
+[*] Loaded 7 targets from 'targets.txt'.
+Enter port range [default: 1-65353]: 
+
+Select terminal mode:
+  1) tmux        (recommended for Kali)
+  2) xfce4       (Kali default desktop)
+  3) gnome       (GNOME Terminal)
+  4) xterm       (plain xterm)
+  5) screen      (GNU screen)
+
+Choice [1-5, default=1]: 
+
+Enable UDP scanning on common ports? [y/N]: n
+
+  Hosts    : 7  (REDACTED)
+  TCP ports: 1-65353
+  UDP scan : false
+  Mode     : tmux
+
+[*] Launching tmux session 'nmap_scan' with 7 host(s)...
+[*] Attaching — use Ctrl+b <number> to switch windows, Ctrl+b d to detach.
+[exited]
+```
+- each scan saves to `./nmap_scan_output/<last_octet>.txt`
+
+```bash
+└─$ tmux list-windows -t nmap_scan
+└─$ tmux attach -t nmap_scan     
+```
+
+[`nxc_bloop.sh`](../03-tools/scripts/nxc_bloop.sh) to loop through different commands more easily! 
+
+Obsidian markdown output
+```bash
+./nxc_bloop.sh -t TARGET_IP --all -C creds.txt --auth domain -d domain.com \
+  --continue-on-success \
+  --log-markdown ~/oscp/nxc_output.md
+```
+
+```bash
+./nxc_bloop.sh -t TARGET_IP --all -u admin -p 'Pass123' --auth domain -d domain.com \
+  --continue-on-success \
+  --log-markdown ~/oscp/nxc_output.md
+```
+
+`--successes-only`
+```bash
+./nxc_bloop.sh -t TARGET_IP --all -C creds.txt --auth domain -d domain.com \
+  --continue-on-success \
+  --successes-only  --log-markdown ~/oscp/nxc_output.md
+```
+
+
 ## File Transfer
 ### Kali -> Windows 
 
@@ -704,6 +764,17 @@ username  1607424    2925  1 Apr23 tty2     00:25:34 java -jar /usr/share/burpsu
 - connect to RDP services from linux -> windows
 ```bash
 └─$ xfreerdp /u:alice /p:'alice_password' /d:domain.com /v:192.168.111.137 /drive:shared,/tmp
+```
+
+```bash
+xfreerdp /u:alice /p:'alice_password' /d:DOMAIN.com /v:dc.domain.com
+```
+
+rdesktop just in case you get certificate errors with xfreerdp
+
+```bash
+rdesktop -u alice -p 'alice_password' -d DOMAIN.com dc.DOMAIN.com
+rdesktop -u alice -p 'alice_password' -d DOMAIN.com DC_IP 
 ```
 
 ### sanitize ascii spaces in payload

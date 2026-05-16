@@ -73,6 +73,12 @@ wmic service get name,pathname,startmode
 driverquery
 ```
 
+
+```cmd
+sc.exe query
+```
+
+
 PS for User & System, Network, Processes & Services
 ```powershell
 # System info
