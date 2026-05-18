@@ -98,6 +98,15 @@ sha512crypt
 sudo hashcat -m 1800 shadow.hash /usr/share/wordlists/rockyou.txt
 ```
 
+```bash
+└─$ cat shadow.txt       
+USER1:$6$REDACTED_HASH/REDACTED_HASH.:REDACTED:0:REDACTED:7:::
+USER2:$6$REDACTED_HASH:REDACTED:0:REDACTED:7::
+
+sudo hashcat -m 1800 --username shadow.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best66.rule
+```
+
+
 AS-REP roast with rules
 ```bash
 sudo hashcat -m 18200 admin.hash /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule --force 
@@ -152,11 +161,13 @@ SSH hash cracking
 └─$ john --wordlist=/usr/share/wordlists/rockyou.txt ssh.txt   
 ```
 
-show cracked result
+show cracked result 
 ```bash
 └─$ john --show shadow.txt
 
 user:password:ID:0:99999:7:::
+
+# note No password hashes left to crack (see FAQ) -> means already cracked, check with --show 
 ```
 
 `/etc/shadow` format for john

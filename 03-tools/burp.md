@@ -353,19 +353,62 @@ result: 302 redirect to /dashboard
 next step: verify manually in browser
 ```
 
+if too much noise with 200 status hits: 
+-->  use error message to grep for correct matches 
+e.g.
+`<p class="caution">User unknown or incorrect password</p>`
+
+```
+Use Grep - Match:
+
+Intruder → Settings
+Go to Grep - Match
+Add this string: string_appearing_with_incorrect_creds
+Run the Burp Intruder attack
+In the results table, sort/filter by that grep column
+```
+
+e.g 
+
+HTTP POST try login with wrong username
+
+```http
+POST /CMS/admin.php HTTP/1.1
+...
+username=admin&password=wrong
+```
+
+HTTP Request
+
+```http
+GET /CMS/admin.php?msg=login_failed HTTP/1.1
+...
+```
+
+HTTP Response 
+
+```http
+HTTP/1.1 200 OK
+...
+<h1>Log in</h1>
+<p class="caution">Unknown username or incorrect password</p>
+...
+```
+
+
 e.g. report notes
 
-|Item|Notes|
-|---|---|
-|Endpoint|`/login`|
-|Method|POST|
-|Username|alice|
-|Payload list|`passwords.txt`|
-|Attack type|Sniper|
-|Success indicator|302 redirect / different length / dashboard access|
-|Valid credential|alice:password|
-|Manual verification|yes/no|
-|Next action|enumerate authenticated app|
+| Item                | Notes                                              |
+| ------------------- | -------------------------------------------------- |
+| Endpoint            | `/login`                                           |
+| Method              | POST                                               |
+| Username            | alice                                              |
+| Payload list        | `passwords.txt`                                    |
+| Attack type         | Sniper                                             |
+| Success indicator   | 302 redirect / different length / dashboard access |
+| Valid credential    | alice:password                                     |
+| Manual verification | yes/no                                             |
+| Next action         | enumerate authenticated app                        |
 
 
 ---

@@ -21,6 +21,7 @@ handy commands organised for quick reference
 
 fast loop script through multiple hosts
 nmap loop with tmux using [`nmap_scan.sh`](../03-tools/scripts/nmap_scan.sh)
+
 ```bash
 └─$ chmod +x nmap_scan.sh
 └─$ ./nmap_scan.sh --targets targets.txt
@@ -76,6 +77,12 @@ Obsidian markdown output
   --successes-only  --log-markdown ~/oscp/nxc_output.md
 ```
 
+multiple targets
+```bash
+./nxc_bloop.sh -t targets.txt --all -C creds.txt --auth domain -d domain.com \
+  --continue-on-success \
+  --successes-only  --log-markdown ~/oscp/nxc_output.md
+```
 
 ## File Transfer
 ### Kali -> Windows 
@@ -438,6 +445,27 @@ find specific file types
 ```bash
 └─$ find / -name "*.txt" 2>/dev/null
 └─$ find / -name "*.pdf" 2>/dev/null
+```
+
+### ssh 
+
+```bash
+└─$ ssh -i id_ecdsa -p PORT_NUM username@TARGET_IP
+```
+
+```bash
+└─$ scp -i id_ecdsa -P PORT_NUM ./les.sh username@TARGET_IP:/home/user/ 
+```
+
+```bash
+# if error shows 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0711 for 'id_ecdsa' are too open.
+
+# change perms 
+chmod 600 id_ecdsa
 ```
 
 #### Find Unix special permission bits

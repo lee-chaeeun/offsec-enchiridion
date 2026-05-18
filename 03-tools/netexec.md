@@ -144,6 +144,12 @@ netexec mssql <TARGET_IP> -u username -p 'password' -d <DOMAIN>
 
 # rdp
 netexec rdp <TARGET_IP> -u username -p 'password' -d <DOMAIN>
+
+# ssh
+nxc ssh target_ip -u username --key-file id_ecdsa
+nxc ssh target_ip -u username --key-file id_ecdsa --passphrase 'password'
+nxc ssh targets.txt -u username -p 'password' --key-file id_ecdsa
+nxc ssh targets.txt --port 2222 -u username -p 'password' --key-file id_ecdsa
 ```
 
 RID brute-force / user discovery <- useful with high privilege credentials! 
@@ -230,6 +236,13 @@ Obsidian markdown output
 ```bash
 ./nxc_bloop.sh -t TARGET_IP --all -C combos.txt \
   --successes-only --log-markdown ~/obsidian/vault/pwk/hits.md
+```
+
+multiple targets
+```bash
+./nxc_bloop.sh -t targets.txt --all -C creds.txt --auth domain -d domain.com \
+  --continue-on-success \
+  --successes-only  --log-markdown ~/oscp/nxc_output.md
 ```
 
 ### Password policy

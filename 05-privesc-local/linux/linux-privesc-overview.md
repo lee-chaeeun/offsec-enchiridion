@@ -552,6 +552,9 @@ find / -name "*.config" 2>/dev/null
 find / -name "*.bak" 2>/dev/null
 find / -name "*.old" 2>/dev/null
 find / -name "*.sh" 2>/dev/null
+find / -type f -path "*/.git/config" 2>/dev/null
+# Find Git metadata directories, then show the repo root:
+find / -type d -name ".git" 2>/dev/null | sed 's#/.git$##'
 ```
 
 Find modified files
@@ -595,6 +598,23 @@ find /home -name "known_hosts" 2>/dev/null
 /usr/bin/find / -name "*ingres*" -print
 /usr/bin/find / -name "*Ingres*" -print
 /usr/bin/find / -perm -4000 -print
+```
+
+```bash
+# Find `.git` directories:
+cd /path/to/repo  
+git status  
+git show
+git log 
+git log --oneline --all --decorate  
+git log --all --oneline  
+git branch -a  
+git remote -v
+git grep -n "password"  
+git grep -n "api_key"  
+git grep -n "secret"  
+git grep -n "token"
+git log -p --all | grep -iE "password|passwd|pwd|secret|token|api[_-]?key|credential"
 ```
 
 - `su` to another user
