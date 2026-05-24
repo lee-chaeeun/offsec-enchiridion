@@ -710,6 +710,35 @@ git log -p --all | grep -iE "password|passwd|pwd|secret|token|api[_-]?key|creden
 - web application admin access
 - lateral movement
 
+Search whole drive on `impacket-smbclient` or other shell access command 
+
+```bash
+# search C drive for useful info
+script -q -c "impacket-smbclient username:'password'@target_ip" tree_capture.txt
+
+Type help for list of commands
+# use C$
+# cd \Users
+# tree .
+...
+# exit .
+```
+
+```bash
+# clean file & grep file for hits 
+sed -r 's/\x1B\[[0-9;?]*[ -/]*[@-~]//g' 160_tree_capture.txt > clean_tree.txt
+
+# delete noise under appdata and .ini files 
+sed -r 's/\x1B\[[0-9;?]*[ -/]*[@-~]//g' tree_capture.txt | grep -vi 'appdata'| grep -vi '\.ini' > clean_tree.txt
+
+grep -iE 'Desktop|Documents|Downloads|\.docx|\.xlsx|\.pdf|kdbx|cred|password|secret' clean_tree.txt > win_hits.txt
+```
+
+log file inspection - given unusual encoding or null bytes -> grep not working 
+
+```bash
+strings -el file_name.log | grep -Ei "ntlm|tlm|hash|password|user|domain"
+```
 
 ### Service Footprints
 

