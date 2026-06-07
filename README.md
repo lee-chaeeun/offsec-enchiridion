@@ -83,7 +83,7 @@ offsec-enchiridion/
 ### 01 Methodology  
   
 - [OSCP Exam Report Template](./01-methodology/OSCP_Exam_Report_Template.md)  
-- [Initial Checklist](./01-methodology/initial-checklist.md)  
+- [Initial Checklist](PenTest-Exam-Report.md)  
   
 ### 02 Cheatsheets  
   

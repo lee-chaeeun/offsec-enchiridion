@@ -1,0 +1,208 @@
+{
+  "main": {
+    "id": "7c80550f5ef38ded",
+    "type": "split",
+    "children": [
+      {
+        "id": "0272040b7f365320",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2fdfd3257ebaacb2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "06-active-directory/kerberos-attacks.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "kerberos-attacks"
+            }
+          },
+          {
+            "id": "ab8d6818fa761c7c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "05-privesc-local/windows/windows-privesc-overview.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "windows-privesc-overview"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "422e0b52ef6b4d6c",
+    "type": "split",
+    "children": [
+      {
+        "id": "15b312529ce5f85d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9749a672959cf439",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "575af6fd7dd2870a",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "30c8725b45ff749d",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "right": {
+    "id": "92e15fd1e57a98b3",
+    "type": "split",
+    "children": [
+      {
+        "id": "22770105537e34fb",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d2b483ade3275ea8",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "06-active-directory/kerberos-attacks.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for kerberos-attacks"
+            }
+          },
+          {
+            "id": "c04c0d713491a4e1",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "06-active-directory/kerberos-attacks.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from kerberos-attacks"
+            }
+          },
+          {
+            "id": "2dde0dea81adc4da",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "357d832ecb9ad39f",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "087e122893a3a0c2",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "06-active-directory/kerberos-attacks.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of kerberos-attacks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "2fdfd3257ebaacb2",
+  "lastOpenFiles": [
+    "05-privesc-local/windows/windows-privesc-overview.md",
+    "06-active-directory/kerberos-attacks.md",
+    "01-methodology/PenTest-Exam-Report.md",
+    "01-methodology/Pentest_Report_Summary_Templates.md"
+  ]
+}
