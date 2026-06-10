@@ -220,6 +220,9 @@ Get-ChildItem -Path C:\ -Include *.txt,*.pdf,*.xls,*.xlsx,*.doc,*.docx -File -Re
 
 # search file contents
 Select-String -Path C:\Users\*\Documents\* -Pattern "password","username","credential","secret" -ErrorAction SilentlyContinue
+
+# look at powershell console history
+Get-ChildItem C:\Users\*\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt -ErrorAction SilentlyContinue
 ```  
 
 
@@ -907,6 +910,16 @@ WINPEAS = tool for automation
 └─$ pwd    
 /home/exploits
 └─$ python3 -m http.server 80  
+```
+
+```bash
+# save winpeas output with color using tmux 
+tmux new -s machine
+ctrl+b
+:pipe-pane 'tee -a winPEAS_output.txt'
+
+# render ANSI escape colors directly in Markdown to view in Obsidian
+aha --black --title "winPEAS" < winPEAS_output.txt > winPEAS_output.html
 ```
 
 ```cmd

